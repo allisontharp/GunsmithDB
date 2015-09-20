@@ -1,5 +1,6 @@
 ﻿Imports MySql.Data.MySqlClient
 
+' should check which tab is selected for acquisition/disposition
 Public Class Form1
     Dim conn As New MySqlConnection
     'MySqlCommand It represents a SQL statement to execute against a MySQL Database
@@ -72,28 +73,35 @@ Public Class Form1
 
 
     Private Sub Bn_test_Click(sender As System.Object, e As System.EventArgs) Handles Bn_test.Click
-        Dim cs As String = "Database=firearms;Data Source=76.74.170.191;" _
-        & "User Id=vb;Password=zsxdcf"
+        'Dim cs As String = "Database=firearms;Data Source=76.74.170.191;" _
+        '& "User Id=vb;Password=zsxdcf"
 
-        Dim stm As String = "SELECT name FROM type WHERE type_id = 1;"
-        Dim version As String
-        'Dim conn As MySqlConnection
+        'Dim stm As String = "SELECT name FROM type WHERE type_id = 1;"
+        'Dim version As String
+        ''Dim conn As MySqlConnection
 
-        Try
-            conn = New MySqlConnection(cs)
-            conn.Open()
+        'Try
+        '    conn = New MySqlConnection(cs)
+        '    conn.Open()
 
-            Dim cmd As MySqlCommand = New MySqlCommand(stm, conn)
-            version = Convert.ToString(cmd.ExecuteScalar())
-            TextBox1.Text = version
-            Console.WriteLine("MySQL version: {0}", version)
+        '    Dim cmd As MySqlCommand = New MySqlCommand(stm, conn)
+        '    version = Convert.ToString(cmd.ExecuteScalar())
+        '    TextBox1.Text = version
+        '    Console.WriteLine("MySQL version: {0}", version)
 
-        Catch ex As MySqlException
-            TextBox1.Text = ex.ToString()
-            Console.WriteLine("Error: " & ex.ToString())
-        Finally
-            conn.Close()
-        End Try
+        'Catch ex As MySqlException
+        '    TextBox1.Text = ex.ToString()
+        '    Console.WriteLine("Error: " & ex.ToString())
+        'Finally
+        '    conn.Close()
+        'End Try
+
+        Dim type_id As String = mysqlquery("select type_id from type where name =  '" + CBAtype.SelectedValue + "';")
+        TextBox1.Text = type_id
+
+        If type_id = Nothing Then
+            CBAnotes.Text = "nothing"
+        End If
     End Sub
 
     Private Function mysqlquery(stmt As String)
@@ -110,10 +118,10 @@ Public Class Form1
 
             While reader.Read
                 If IsDBNull(reader) Then
-                    TextBox11.Text = "its empty"
+                    CBAnotes.Text = "its empty"
                     Return ("empty")
                 Else
-                    TextBox11.Text = "it isn't empty " + reader.GetString(0)
+                    CBAnotes.Text = "it isn't empty " + reader.GetString(0)
                     Return reader.GetString(0)
                 End If
             End While
@@ -158,7 +166,7 @@ Public Class Form1
         Dim cs As String = "Database=firearms;Data Source=76.74.170.191;" _
         & "User Id=vb;Password=zsxdcf"
         Dim stm As String = "INSERT INTO " + table + " (" + cols + ") VALUES (" + val + ");"
-        TextBox11.Text = stm
+        CBAnotes.Text = stm
 
         Try
             conn = New MySqlConnection(cs)
@@ -193,17 +201,61 @@ Public Class Form1
         Dim man_id As String = mysqlquery("select man_id from manufacturers where name = '" + CBAmanufacturers.SelectedValue + "';")
         Dim model_id As String = mysqlquery("select model_id from models where name = '" + CBAmodel.SelectedValue + "';")
         Dim mancountry_id As String = mysqlquery("select mancountry_id from mancountry where name = '" + CBAmancountry.SelectedValue + "';")
+        Dim cat_id As String = mysqlquery("select cat_id from category where name = '" + CBAcategory.SelectedValue + "';")
+        Dim trans_firstname As String = CBAfname.Text
+        Dim trans_lastname As String = CBAlname.Text
+
+        Dim errmsg As String = ""
 
 
-        ''Acquisition
 
         ' Required
-        TextBox1.Text = mancountry_id
-        TextBox11.Text = cal_id
-        mysqlsubmit("gun", "gun_id, type_id, cal_id, man_id, model_id, mancountry_id, serialnum, date_entered, isupdated", "null, '" + type_id + "', '" + cal_id _
-                    + "', '" + man_id + "', '" + model_id + "', '" + mancountry_id + "', '" + CBAserialnum.Text + "', NOW(), 0")
-        ' mysqlsubmit("mancountry", "mancountry_id, name", "null, '" + CBAmancountry.Text + "'")
+        ' need to check that required things are filled out, vbcr if label, vbcrlf if textobx
+        If type_id Is Nothing Then
+            errmsg += vbCrLf + "Type"
+        End If
+
+        If cal_id Is Nothing Then
+            errmsg += vbCrLf + "Caliber"
+        End If
+
+        If man_id Is Nothing Then
+            errmsg += vbCrLf + "Manufacturer"
+        End If
+
+        If model_id Is Nothing Then
+            errmsg += vbCrLf + "Model"
+        End If
+
+        If mancountry_id Is Nothing Then
+            errmsg += vbCrLf + "Manufacturer Country"
+        End If
+
+        If cat_id Is Nothing Then
+            errmsg += vbCrLf + "Category"
+        End If
+
+        If trans_firstname = "" Then
+            errmsg += vbCrLf + "First Name"
+        End If
+
+        If trans_lastname = "" Then
+            errmsg += vbCr + "Last Name"
+        End If
+
+
+
+
+        If errmsg Is Nothing Then
+            mysqlsubmit("gun", "gun_id, type_id, cal_id, man_id, model_id, mancountry_id, serialnum, date_entered, isupdated", "null, '" + type_id + "', '" + cal_id _
+                + "', '" + man_id + "', '" + model_id + "', '" + mancountry_id + "', '" + CBAserialnum.Text + "', NOW(), 0")
+        Else
+            TBAerror.Text = "The following need to be completed: " + errmsg
+        End If
+
+
 
         'Not Required
     End Sub
+
 End Class
