@@ -47,11 +47,11 @@ Public Class Form1
             MsgBox(ex.Message)
         End Try
 
-        cbfill("SELECT name FROM type", "type", "name", CBAtype)
-        cbfill("SELECT name FROM caliber", "caliber", "name", CBAcaliber)
-        cbfill("SELECT name FROM category", "category", "name", CBAcategory)
-        cbfill("SELECT name FROM manufacturers", "manufacturers", "name", CBAmanufacturers)
-        cbfill("SELECT name FROM mancountry", "mancountry", "name", CBAmancountry)
+        cbfill("SELECT name FROM type", "type", "name", Atype)
+        cbfill("SELECT name FROM caliber", "caliber", "name", Acaliber)
+        cbfill("SELECT name FROM category", "category", "name", Acategory)
+        cbfill("SELECT name FROM manufacturers", "manufacturers", "name", Amanufacturers)
+        cbfill("SELECT name FROM mancountry", "mancountry", "name", Amancountry)
 
 
     End Sub
@@ -96,11 +96,11 @@ Public Class Form1
         '    conn.Close()
         'End Try
 
-        Dim type_id As String = mysqlquery("select type_id from type where name =  '" + CBAtype.SelectedValue + "';")
+        Dim type_id As String = mysqlquery("select type_id from type where name =  '" + Atype.SelectedValue + "';")
         TextBox1.Text = type_id
 
         If type_id = Nothing Then
-            CBAnotes.Text = "nothing"
+            Anotes.Text = "nothing"
         End If
     End Sub
 
@@ -118,10 +118,10 @@ Public Class Form1
 
             While reader.Read
                 If IsDBNull(reader) Then
-                    CBAnotes.Text = "its empty"
+                    Anotes.Text = "its empty"
                     Return ("empty")
                 Else
-                    CBAnotes.Text = "it isn't empty " + reader.GetString(0)
+                    Anotes.Text = "it isn't empty " + reader.GetString(0)
                     Return reader.GetString(0)
                 End If
             End While
@@ -141,7 +141,7 @@ Public Class Form1
         Dim cs As String = "Database=firearms;Data Source=76.74.170.191;" _
         & "User Id=vb;Password=zsxdcf"
 
-        Dim ins As String = Format(DateAcqDpdwn.Value, "yyyy-MM-dd")
+        Dim ins As String = Format(AAcquired.Value, "yyyy-MM-dd")
         Dim stm As String = "INSERT INTO test (test_id, date) VALUES (null, '" + ins + "');"
         Dim version As String
         'Dim conn As MySqlConnection
@@ -166,7 +166,7 @@ Public Class Form1
         Dim cs As String = "Database=firearms;Data Source=76.74.170.191;" _
         & "User Id=vb;Password=zsxdcf"
         Dim stm As String = "INSERT INTO " + table + " (" + cols + ") VALUES (" + val + ");"
-        CBAnotes.Text = stm
+        Anotes.Text = stm
 
         Try
             conn = New MySqlConnection(cs)
@@ -182,75 +182,87 @@ Public Class Form1
         End Try
     End Sub
 
-    Private Sub CBAmanufacturers_SelectedIndexChanged(sender As Object, e As EventArgs) Handles CBAmanufacturers.SelectedIndexChanged
+    Private Sub CBAmanufacturers_SelectedIndexChanged(sender As Object, e As EventArgs) Handles Amanufacturers.SelectedIndexChanged
         Dim manufacturer As String
         'need to clear models when this changes
-        CBAmodel.Text = String.Empty
+        Amodel.Text = String.Empty
 
 
-        If CBAmanufacturers.SelectedIndex > 0 Then
-            manufacturer = mysqlquery("SELECT man_id FROM manufacturers WHERE name = '" + CBAmanufacturers.SelectedValue + "';")
+        If Amanufacturers.SelectedIndex > 0 Then
+            manufacturer = mysqlquery("SELECT man_id FROM manufacturers WHERE name = '" + Amanufacturers.SelectedValue + "';")
 
-            cbfill("SELECT name FROM models WHERE man_id = '" + manufacturer + "';", "models", "name", CBAmodel)
+            cbfill("SELECT name FROM models WHERE man_id = '" + manufacturer + "';", "models", "name", Amodel)
         End If
     End Sub
 
-    Private Sub BAsubmit_Click(sender As Object, e As EventArgs) Handles BAsubmit.Click
-        Dim type_id As String = mysqlquery("select type_id from type where name =  '" + CBAtype.SelectedValue + "';")
-        Dim cal_id As String = mysqlquery("select cal_id from caliber where name = '" + CBAcaliber.SelectedValue + "';")
-        Dim man_id As String = mysqlquery("select man_id from manufacturers where name = '" + CBAmanufacturers.SelectedValue + "';")
-        Dim model_id As String = mysqlquery("select model_id from models where name = '" + CBAmodel.SelectedValue + "';")
-        Dim mancountry_id As String = mysqlquery("select mancountry_id from mancountry where name = '" + CBAmancountry.SelectedValue + "';")
-        Dim cat_id As String = mysqlquery("select cat_id from category where name = '" + CBAcategory.SelectedValue + "';")
-        Dim trans_firstname As String = CBAfname.Text
-        Dim trans_lastname As String = CBAlname.Text
+    Private Sub BAsubmit_Click(sender As Object, e As EventArgs) Handles Asubmit.Click
+        Dim aqc_date As String = AAcquired.ToString
+        Dim type_id As String = mysqlquery("select type_id from type where name =  '" + Atype.SelectedValue + "';")
+        Dim cal_id As String = mysqlquery("select cal_id from caliber where name = '" + Acaliber.SelectedValue + "';")
+        Dim man_id As String = mysqlquery("select man_id from manufacturers where name = '" + Amanufacturers.SelectedValue + "';")
+        Dim model_id As String = mysqlquery("select model_id from models where name = '" + Amodel.SelectedValue + "';")
+        Dim mancountry_id As String = mysqlquery("select mancountry_id from mancountry where name = '" + Amancountry.SelectedValue + "';")
+        Dim cat_id As String = mysqlquery("select cat_id from category where name = '" + Acategory.SelectedValue + "';")
+        Dim firstname As String = Afname.Text
+        Dim lastname As String = Alname.Text
+        Dim cname As String = Acname.Text
 
+        Dim err As Boolean = 0
         Dim errmsg As String = ""
 
-
+        Aerror.Text = ""
 
         ' Required
         ' need to check that required things are filled out, vbcr if label, vbcrlf if textobx
         If type_id Is Nothing Then
-            errmsg += vbCrLf + "Type"
+            errmsg += vbCrLf + "type"
         End If
 
         If cal_id Is Nothing Then
-            errmsg += vbCrLf + "Caliber"
+            errmsg += vbCrLf + "caliber"
         End If
 
         If man_id Is Nothing Then
-            errmsg += vbCrLf + "Manufacturer"
+            errmsg += vbCrLf + "manufacturer"
         End If
 
         If model_id Is Nothing Then
-            errmsg += vbCrLf + "Model"
+            errmsg += vbCrLf + "model"
         End If
 
         If mancountry_id Is Nothing Then
-            errmsg += vbCrLf + "Manufacturer Country"
+            errmsg += vbCrLf + "manufacturer country"
+        End If
+
+        If Aserialnum.Text = "" Then
+            errmsg += vbCrLf + "serial number"
         End If
 
         If cat_id Is Nothing Then
-            errmsg += vbCrLf + "Category"
+            errmsg += vbCrLf + "category"
         End If
 
-        If trans_firstname = "" Then
-            errmsg += vbCrLf + "First Name"
+        If firstname = "" And lastname = "" And cname = "" Then
+            errmsg += vbCrLf + "first name and last name or company name"
+        ElseIf firstname = "" And lastname.Length() > 0 Then
+            errmsg += "first name"
+        ElseIf lastname = "" And firstname.Length() > 0 Then
+            errmsg += "last name"
         End If
 
-        If trans_lastname = "" Then
-            errmsg += vbCr + "Last Name"
-        End If
 
 
 
-
-        If errmsg Is Nothing Then
+        If errmsg Is String.Empty Then
             mysqlsubmit("gun", "gun_id, type_id, cal_id, man_id, model_id, mancountry_id, serialnum, date_entered, isupdated", "null, '" + type_id + "', '" + cal_id _
-                + "', '" + man_id + "', '" + model_id + "', '" + mancountry_id + "', '" + CBAserialnum.Text + "', NOW(), 0")
+               + "', '" + man_id + "', '" + model_id + "', '" + mancountry_id + "', '" + Aserialnum.Text + "', NOW(), 0")
+
+            mysqlsubmit("customer", "customer_id, firstname, lastname, company, address1, address2, city, state, zip, licensenum", "null, '" + firstname + "', '" + lastname + "', '" + cname + "', '', '', '', 'IN', '46168', '1111111111'")
+
+
+            TextBox11.Text = "submitted"
         Else
-            TBAerror.Text = "The following need to be completed: " + errmsg
+            Aerror.Text = "The following need to be completed:  " + errmsg
         End If
 
 
