@@ -77,6 +77,18 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Class1.vb" />
+    <Compile Include="customeredit.Designer.vb">
+      <DependentUpon>customeredit.vb</DependentUpon>
+    </Compile>
+    <Compile Include="customeredit.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="customerform.Designer.vb">
+      <DependentUpon>customerform.vb</DependentUpon>
+    </Compile>
+    <Compile Include="customerform.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Form1.vb">
       <SubType>Form</SubType>
     </Compile>
@@ -102,6 +114,12 @@
     <Compile Include="mysqldb.vb" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="customeredit.resx">
+      <DependentUpon>customeredit.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="customerform.resx">
+      <DependentUpon>customerform.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.vb</DependentUpon>
     </EmbeddedResource>
