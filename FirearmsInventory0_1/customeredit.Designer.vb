@@ -59,11 +59,17 @@ Partial Class customeredit
         Me.Clname = New System.Windows.Forms.TextBox()
         Me.Cfname = New System.Windows.Forms.TextBox()
         Me.CEsubmit = New System.Windows.Forms.Button()
+        Me.SCPhonenumber = New System.Windows.Forms.Label()
+        Me.Label2 = New System.Windows.Forms.Label()
+        Me.Label1 = New System.Windows.Forms.Label()
+        Me.Cphonenumber = New System.Windows.Forms.TextBox()
         Me.customer_group.SuspendLayout()
         Me.SuspendLayout()
         '
         'customer_group
         '
+        Me.customer_group.Controls.Add(Me.SCPhonenumber)
+        Me.customer_group.Controls.Add(Me.Label2)
         Me.customer_group.Controls.Add(Me.SCcustomer_id)
         Me.customer_group.Controls.Add(Me.SClicensenum)
         Me.customer_group.Controls.Add(Me.SCzip)
@@ -366,7 +372,7 @@ Partial Class customeredit
         Me.Clicensenum.Location = New System.Drawing.Point(15, 202)
         Me.Clicensenum.Margin = New System.Windows.Forms.Padding(2)
         Me.Clicensenum.Name = "Clicensenum"
-        Me.Clicensenum.Size = New System.Drawing.Size(241, 20)
+        Me.Clicensenum.Size = New System.Drawing.Size(119, 20)
         Me.Clicensenum.TabIndex = 110
         '
         'Label9
@@ -432,11 +438,53 @@ Partial Class customeredit
         Me.CEsubmit.Text = "Submit"
         Me.CEsubmit.UseVisualStyleBackColor = True
         '
+        'SCPhonenumber
+        '
+        Me.SCPhonenumber.AutoSize = True
+        Me.SCPhonenumber.Location = New System.Drawing.Point(154, 168)
+        Me.SCPhonenumber.Name = "SCPhonenumber"
+        Me.SCPhonenumber.Size = New System.Drawing.Size(27, 13)
+        Me.SCPhonenumber.TabIndex = 119
+        Me.SCPhonenumber.Text = "N/A"
+        '
+        'Label2
+        '
+        Me.Label2.AutoSize = True
+        Me.Label2.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label2.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.Label2.Location = New System.Drawing.Point(154, 155)
+        Me.Label2.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
+        Me.Label2.Name = "Label2"
+        Me.Label2.Size = New System.Drawing.Size(94, 13)
+        Me.Label2.TabIndex = 118
+        Me.Label2.Text = "Phone Number:"
+        '
+        'Label1
+        '
+        Me.Label1.AutoSize = True
+        Me.Label1.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.Label1.Location = New System.Drawing.Point(135, 187)
+        Me.Label1.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
+        Me.Label1.Name = "Label1"
+        Me.Label1.Size = New System.Drawing.Size(81, 13)
+        Me.Label1.TabIndex = 122
+        Me.Label1.Text = "Phone Number:"
+        '
+        'Cphonenumber
+        '
+        Me.Cphonenumber.Location = New System.Drawing.Point(138, 202)
+        Me.Cphonenumber.Margin = New System.Windows.Forms.Padding(2)
+        Me.Cphonenumber.Name = "Cphonenumber"
+        Me.Cphonenumber.Size = New System.Drawing.Size(119, 20)
+        Me.Cphonenumber.TabIndex = 121
+        '
         'customeredit
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(631, 285)
+        Me.Controls.Add(Me.Label1)
+        Me.Controls.Add(Me.Cphonenumber)
         Me.Controls.Add(Me.CEsubmit)
         Me.Controls.Add(Me.Label13)
         Me.Controls.Add(Me.Cstate)
@@ -502,4 +550,8 @@ Partial Class customeredit
     Friend WithEvents Clname As TextBox
     Friend WithEvents Cfname As TextBox
     Friend WithEvents CEsubmit As Button
+    Friend WithEvents SCPhonenumber As Label
+    Friend WithEvents Label2 As Label
+    Friend WithEvents Label1 As Label
+    Friend WithEvents Cphonenumber As TextBox
 End Class

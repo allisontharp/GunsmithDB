@@ -6,9 +6,9 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{71DA1117-5C89-4A83-8712-4E7584214314}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <StartupObject>FirearmsInventory0_1.My.MyApplication</StartupObject>
-    <RootNamespace>FirearmsInventory0_1</RootNamespace>
-    <AssemblyName>FirearmsInventory0_1</AssemblyName>
+    <StartupObject>FirearmsInventory0_2.My.MyApplication</StartupObject>
+    <RootNamespace>FirearmsInventory0_2</RootNamespace>
+    <AssemblyName>FirearmsInventory0_2</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <MyType>WindowsForms</MyType>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
@@ -21,7 +21,7 @@
     <DefineDebug>true</DefineDebug>
     <DefineTrace>true</DefineTrace>
     <OutputPath>bin\Debug\</OutputPath>
-    <DocumentationFile>FirearmsInventory0_1.xml</DocumentationFile>
+    <DocumentationFile>FirearmsInventory0_2.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
@@ -31,7 +31,7 @@
     <DefineTrace>true</DefineTrace>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
-    <DocumentationFile>FirearmsInventory0_1.xml</DocumentationFile>
+    <DocumentationFile>FirearmsInventory0_2.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
   </PropertyGroup>
   <PropertyGroup>
@@ -76,6 +76,12 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="changecustomerform.Designer.vb">
+      <DependentUpon>changecustomerform.vb</DependentUpon>
+    </Compile>
+    <Compile Include="changecustomerform.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Class1.vb" />
     <Compile Include="customeredit.Designer.vb">
       <DependentUpon>customeredit.vb</DependentUpon>
@@ -83,10 +89,10 @@
     <Compile Include="customeredit.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="customerform.Designer.vb">
-      <DependentUpon>customerform.vb</DependentUpon>
+    <Compile Include="customersearch.Designer.vb">
+      <DependentUpon>customersearch.vb</DependentUpon>
     </Compile>
-    <Compile Include="customerform.vb">
+    <Compile Include="customersearch.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Form1.vb">
@@ -112,13 +118,22 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="mysqldb.vb" />
+    <Compile Include="search.Designer.vb">
+      <DependentUpon>search.vb</DependentUpon>
+    </Compile>
+    <Compile Include="search.vb">
+      <SubType>Form</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="changecustomerform.resx">
+      <DependentUpon>changecustomerform.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="customeredit.resx">
       <DependentUpon>customeredit.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="customerform.resx">
-      <DependentUpon>customerform.vb</DependentUpon>
+    <EmbeddedResource Include="customersearch.resx">
+      <DependentUpon>customersearch.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.vb</DependentUpon>
@@ -128,6 +143,9 @@
       <LastGenOutput>Resources.Designer.vb</LastGenOutput>
       <CustomToolNamespace>My.Resources</CustomToolNamespace>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="search.resx">
+      <DependentUpon>search.vb</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

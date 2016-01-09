@@ -1,4 +1,4 @@
-﻿Public Class customerform
+﻿Public Class searchform
     Public cid As String
 
     Private Sub customerform_Load(sender As System.Object, e As System.EventArgs) Handles MyBase.Load
@@ -35,6 +35,8 @@
         Form1.Sstate.Text = acq_grid.Item(7, i).Value
         Form1.Szip.Text = acq_grid.Item(8, i).Value
         Form1.Slicensenum.Text = acq_grid.Item(9, i).Value
+
+        Me.Close()
 
     End Sub
 

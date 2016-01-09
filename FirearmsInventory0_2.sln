@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.23107.0
+VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "FirearmsInventory0_1", "FirearmsInventory0_1\FirearmsInventory0_1.vbproj", "{71DA1117-5C89-4A83-8712-4E7584214314}"
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "FirearmsInventory0_2", "FirearmsInventory0_1\FirearmsInventory0_2.vbproj", "{71DA1117-5C89-4A83-8712-4E7584214314}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
