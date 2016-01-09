@@ -12,10 +12,6 @@ Public Class Form1
     Public constr As String = "database=firearms;data source=76.74.170.191;" _
         & "user id=vb;password=zsxdcf"
     Public customer_id As String
-
-
-
-
     'Public Sub connect()
     '    Dim DatabaseName As String = "firearms"
     '    Dim server As String = "76.74.170.191"
@@ -107,7 +103,7 @@ Public Class Form1
             conn = New MySqlConnection(constr)
             conn.Open()
 
-            'testbox.Text = stmt
+
 
             Dim cmd As MySqlCommand = New MySqlCommand(stmt, conn)
             Dim reader As MySqlDataReader = cmd.ExecuteReader
@@ -138,7 +134,7 @@ Public Class Form1
         Dim cs As String = "Database=firearms;Data Source=76.74.170.191;" _
         & "User Id=vb;Password=zsxdcf"
         Dim stm As String = "INSERT INTO " + table + " (" + cols + ") VALUES (" + val + ");"
-        'testbox.Text = stm
+
 
         Try
             conn = New MySqlConnection(cs)
@@ -417,7 +413,7 @@ Public Class Form1
 
             query += ")"
 
-            testbox.Text = query
+
             Dim cmd = New MySqlCommand(query, conn)
 
             cmd.Parameters.AddWithValue("@type_id", type_id)
@@ -435,6 +431,7 @@ Public Class Form1
 
             query = "Select LAST_INSERT_ID()"
             cmd = New MySqlCommand(query, conn)
+
             Dim reader As MySqlDataReader = cmd.ExecuteReader()
 
             Dim gun_id As String
@@ -445,7 +442,7 @@ Public Class Form1
 
             reader.Close()
 
-            testbox.Text = gun_id
+
 
             query = "INSERT INTO acquisition (acq_id, acq_date, customer_id, gun_id, transaction_date, date_entered) VALUES
                         (NULL, @acq_date, @customer_id, @gun_id, @transaction_date, NOW())"
@@ -764,8 +761,6 @@ Public Class Form1
         End If
 
 
-        '   testbox.Text = query
-
         Try
             adap.Fill(ds)
 
@@ -781,7 +776,7 @@ Public Class Form1
             'obj.Show()
 
         Catch ex As MySqlException
-            'testbox.Text = ex.ToString()
+
         Finally
             ' conn.Close()
         End Try
@@ -1061,7 +1056,7 @@ Public Class Form1
         End If
 
 
-        '   testbox.Text = query
+
 
         Try
             adap.Fill(ds)
@@ -1078,7 +1073,7 @@ Public Class Form1
             'obj.Show()
 
         Catch ex As MySqlException
-            'testbox.Text = ex.ToString()
+
         Finally
             conn.Close()
         End Try
@@ -1178,7 +1173,7 @@ Public Class Form1
     Private Sub Csearchbtn_Click(sender As Object, e As EventArgs) Handles Csearchbtn.Click
         Dim query As String = "SELECT customer.customer_id, customer.firstname AS FirstName, customer.lastname AS LastName, customer.company AS Company, customer.address1,
                                 customer.address2, customer.city, customer.state, customer.zip, customer.phone_number AS phone, customer.licensenum FROM customer WHERE "
-        Dim obj As New customersearch
+
         Dim adap As MySqlDataAdapter = New MySqlDataAdapter(query, conn)
         Dim ds As New DataSet()
         Dim check As Boolean = False
@@ -1317,7 +1312,6 @@ Public Class Form1
         End If
 
 
-        testbox.Text = query
 
         Try
             adap.Fill(ds)
@@ -1334,7 +1328,7 @@ Public Class Form1
             ' obj.Show()
 
         Catch ex As MySqlException
-            ' testbox.Text = ex.ToString()
+
         Finally
             conn.Close()
         End Try
@@ -1681,7 +1675,6 @@ Public Class Form1
         End If
 
 
-        '   testbox.Text = query
 
         Try
             adap.Fill(ds)
@@ -1694,7 +1687,7 @@ Public Class Form1
             conn.Dispose()
 
         Catch ex As MySqlException
-            'testbox.Text = ex.ToString()
+
         Finally
             conn.Close()
         End Try
@@ -1943,7 +1936,6 @@ Public Class Form1
                                 "
 
 
-        Dim obj As New search
         Dim adap As MySqlDataAdapter = New MySqlDataAdapter(query, conn)
         Dim ds As New DataSet()
         Dim check As Boolean = True
@@ -2215,7 +2207,7 @@ Public Class Form1
             conn.Dispose()
 
         Catch ex As MySqlException
-            'testbox.Text = ex.ToString()
+
         Finally
             conn.Close()
         End Try
@@ -2370,6 +2362,43 @@ Public Class Form1
     Private Sub changecustomerbtn_Click(sender As Object, e As EventArgs) Handles changecustomerbtn.Click
         Dim obj As New changecustomerform
 
+        obj.Show()
+    End Sub
+
+    Private Sub newman_Click(sender As Object, e As EventArgs) Handles newman.Click
+        Dim obj As New newguntype
+
+        obj.gunlabel.Text = "Manufacturer:"
+
+        obj.Show()
+    End Sub
+
+    Private Sub newmancountry_Click(sender As Object, e As EventArgs) Handles newmancountry.Click
+        Dim obj As New newguntype
+
+        obj.gunlabel.Text = "Manufacturer Country:"
+
+        obj.Show()
+    End Sub
+
+    Private Sub newcaliber_Click(sender As Object, e As EventArgs) Handles newcaliber.Click
+        Dim obj As New newguntype
+
+        obj.gunlabel.Text = "Caliber:"
+
+        obj.Show()
+    End Sub
+
+    Private Sub newmodel_Click(sender As Object, e As EventArgs) Handles newmodel.Click
+        Dim obj As New newguntype
+
+        obj.gunlabel.Text = "Model:"
+
+        obj.manufacturerlabel.Visible = True
+        obj.Amanufacturers.Visible = True
+
+
+        cbfill("SELECT name FROM manufacturers", "manufacturers", "name", obj.Amanufacturers)
         obj.Show()
     End Sub
 End Class

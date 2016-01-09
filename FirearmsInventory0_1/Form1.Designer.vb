@@ -66,7 +66,10 @@ Partial Class Form1
         Me.Label27 = New System.Windows.Forms.Label()
         Me.Label26 = New System.Windows.Forms.Label()
         Me.TabPage2 = New System.Windows.Forms.TabPage()
+        Me.derror = New System.Windows.Forms.TextBox()
         Me.GroupBox5 = New System.Windows.Forms.GroupBox()
+        Me.Label71 = New System.Windows.Forms.Label()
+        Me.Dcode = New System.Windows.Forms.TextBox()
         Me.dtransdate = New System.Windows.Forms.DateTimePicker()
         Me.Label77 = New System.Windows.Forms.Label()
         Me.Dsubmit = New System.Windows.Forms.Button()
@@ -101,8 +104,6 @@ Partial Class Form1
         Me.DSCaddress2 = New System.Windows.Forms.Label()
         Me.Dclearbtn = New System.Windows.Forms.Button()
         Me.GroupBox2 = New System.Windows.Forms.GroupBox()
-        Me.Label71 = New System.Windows.Forms.Label()
-        Me.Dcode = New System.Windows.Forms.TextBox()
         Me.Label50 = New System.Windows.Forms.Label()
         Me.Dphonenum = New System.Windows.Forms.TextBox()
         Me.Label51 = New System.Windows.Forms.Label()
@@ -238,13 +239,15 @@ Partial Class Form1
         Me.Scat = New System.Windows.Forms.ComboBox()
         Me.Scaliber = New System.Windows.Forms.ComboBox()
         Me.TabControl1 = New System.Windows.Forms.TabControl()
-        Me.testbox = New System.Windows.Forms.TextBox()
         Me.AcqStrip = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.ToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripMenuItem2 = New System.Windows.Forms.ToolStripMenuItem()
         Me.DispStrip = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.ToolStripMenuItem3 = New System.Windows.Forms.ToolStripMenuItem()
-        Me.derror = New System.Windows.Forms.TextBox()
+        Me.newman = New System.Windows.Forms.Button()
+        Me.newmancountry = New System.Windows.Forms.Button()
+        Me.newcaliber = New System.Windows.Forms.Button()
+        Me.newmodel = New System.Windows.Forms.Button()
         Me.scustomer_group.SuspendLayout()
         Me.TabPage2.SuspendLayout()
         Me.GroupBox5.SuspendLayout()
@@ -727,6 +730,18 @@ Partial Class Form1
         Me.TabPage2.Text = "Disposition"
         Me.TabPage2.UseVisualStyleBackColor = True
         '
+        'derror
+        '
+        Me.derror.ForeColor = System.Drawing.SystemColors.ActiveCaptionText
+        Me.derror.Location = New System.Drawing.Point(953, 327)
+        Me.derror.Margin = New System.Windows.Forms.Padding(2)
+        Me.derror.Multiline = True
+        Me.derror.Name = "derror"
+        Me.derror.ReadOnly = True
+        Me.derror.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
+        Me.derror.Size = New System.Drawing.Size(384, 187)
+        Me.derror.TabIndex = 232
+        '
         'GroupBox5
         '
         Me.GroupBox5.Controls.Add(Me.Label71)
@@ -739,6 +754,24 @@ Partial Class Form1
         Me.GroupBox5.TabIndex = 231
         Me.GroupBox5.TabStop = False
         Me.GroupBox5.Text = "Transaction"
+        '
+        'Label71
+        '
+        Me.Label71.AutoSize = True
+        Me.Label71.Location = New System.Drawing.Point(162, 16)
+        Me.Label71.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
+        Me.Label71.Name = "Label71"
+        Me.Label71.Size = New System.Drawing.Size(35, 13)
+        Me.Label71.TabIndex = 233
+        Me.Label71.Text = "Code:"
+        '
+        'Dcode
+        '
+        Me.Dcode.Location = New System.Drawing.Point(162, 31)
+        Me.Dcode.Margin = New System.Windows.Forms.Padding(2)
+        Me.Dcode.Name = "Dcode"
+        Me.Dcode.Size = New System.Drawing.Size(119, 20)
+        Me.Dcode.TabIndex = 232
         '
         'dtransdate
         '
@@ -1144,24 +1177,6 @@ Partial Class Form1
         Me.GroupBox2.TabStop = False
         Me.GroupBox2.Text = "Acquisition Search"
         '
-        'Label71
-        '
-        Me.Label71.AutoSize = True
-        Me.Label71.Location = New System.Drawing.Point(162, 16)
-        Me.Label71.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
-        Me.Label71.Name = "Label71"
-        Me.Label71.Size = New System.Drawing.Size(35, 13)
-        Me.Label71.TabIndex = 233
-        Me.Label71.Text = "Code:"
-        '
-        'Dcode
-        '
-        Me.Dcode.Location = New System.Drawing.Point(162, 31)
-        Me.Dcode.Margin = New System.Windows.Forms.Padding(2)
-        Me.Dcode.Name = "Dcode"
-        Me.Dcode.Size = New System.Drawing.Size(119, 20)
-        Me.Dcode.TabIndex = 232
-        '
         'Label50
         '
         Me.Label50.AutoSize = True
@@ -1371,6 +1386,7 @@ Partial Class Form1
         '
         'Dmancountry
         '
+        Me.Dmancountry.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.Dmancountry.FormattingEnabled = True
         Me.Dmancountry.Location = New System.Drawing.Point(17, 409)
         Me.Dmancountry.Margin = New System.Windows.Forms.Padding(2)
@@ -1481,6 +1497,7 @@ Partial Class Form1
         '
         'Dmodel
         '
+        Me.Dmodel.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.Dmodel.FormattingEnabled = True
         Me.Dmodel.Location = New System.Drawing.Point(140, 372)
         Me.Dmodel.Margin = New System.Windows.Forms.Padding(2)
@@ -1490,6 +1507,7 @@ Partial Class Form1
         '
         'Dmanufacturer
         '
+        Me.Dmanufacturer.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.Dmanufacturer.FormattingEnabled = True
         Me.Dmanufacturer.Location = New System.Drawing.Point(17, 372)
         Me.Dmanufacturer.Margin = New System.Windows.Forms.Padding(2)
@@ -1509,6 +1527,7 @@ Partial Class Form1
         '
         'Dcaliber
         '
+        Me.Dcaliber.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.Dcaliber.FormattingEnabled = True
         Me.Dcaliber.Location = New System.Drawing.Point(141, 335)
         Me.Dcaliber.Margin = New System.Windows.Forms.Padding(2)
@@ -1549,7 +1568,7 @@ Partial Class Form1
         Me.csearch_grid.AllowUserToAddRows = False
         Me.csearch_grid.AllowUserToDeleteRows = False
         Me.csearch_grid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.csearch_grid.Location = New System.Drawing.Point(349, 11)
+        Me.csearch_grid.Location = New System.Drawing.Point(310, 11)
         Me.csearch_grid.Name = "csearch_grid"
         Me.csearch_grid.ReadOnly = True
         Me.csearch_grid.Size = New System.Drawing.Size(1084, 250)
@@ -1557,6 +1576,10 @@ Partial Class Form1
         '
         'GroupBox1
         '
+        Me.GroupBox1.Controls.Add(Me.newmodel)
+        Me.GroupBox1.Controls.Add(Me.newcaliber)
+        Me.GroupBox1.Controls.Add(Me.newmancountry)
+        Me.GroupBox1.Controls.Add(Me.newman)
         Me.GroupBox1.Controls.Add(Me.adeadline_no)
         Me.GroupBox1.Controls.Add(Me.Label1)
         Me.GroupBox1.Controls.Add(Me.adeadline_yes)
@@ -1585,9 +1608,9 @@ Partial Class Form1
         Me.GroupBox1.Controls.Add(Me.Label15)
         Me.GroupBox1.Controls.Add(Me.Label6)
         Me.GroupBox1.Controls.Add(Me.Label14)
-        Me.GroupBox1.Location = New System.Drawing.Point(349, 276)
+        Me.GroupBox1.Location = New System.Drawing.Point(310, 276)
         Me.GroupBox1.Name = "GroupBox1"
-        Me.GroupBox1.Size = New System.Drawing.Size(544, 230)
+        Me.GroupBox1.Size = New System.Drawing.Size(769, 230)
         Me.GroupBox1.TabIndex = 171
         Me.GroupBox1.TabStop = False
         Me.GroupBox1.Text = "Firearm"
@@ -1595,7 +1618,7 @@ Partial Class Form1
         'adeadline_no
         '
         Me.adeadline_no.AutoSize = True
-        Me.adeadline_no.Location = New System.Drawing.Point(329, 31)
+        Me.adeadline_no.Location = New System.Drawing.Point(519, 35)
         Me.adeadline_no.Name = "adeadline_no"
         Me.adeadline_no.Size = New System.Drawing.Size(39, 17)
         Me.adeadline_no.TabIndex = 196
@@ -1616,7 +1639,7 @@ Partial Class Form1
         'adeadline_yes
         '
         Me.adeadline_yes.AutoSize = True
-        Me.adeadline_yes.Location = New System.Drawing.Point(280, 31)
+        Me.adeadline_yes.Location = New System.Drawing.Point(470, 35)
         Me.adeadline_yes.Name = "adeadline_yes"
         Me.adeadline_yes.Size = New System.Drawing.Size(43, 17)
         Me.adeadline_yes.TabIndex = 195
@@ -1638,7 +1661,7 @@ Partial Class Form1
         'Label2
         '
         Me.Label2.AutoSize = True
-        Me.Label2.Location = New System.Drawing.Point(140, 16)
+        Me.Label2.Location = New System.Drawing.Point(248, 16)
         Me.Label2.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(96, 13)
@@ -1648,7 +1671,7 @@ Partial Class Form1
         'Label20
         '
         Me.Label20.AutoSize = True
-        Me.Label20.Location = New System.Drawing.Point(276, 58)
+        Me.Label20.Location = New System.Drawing.Point(466, 62)
         Me.Label20.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.Label20.Name = "Label20"
         Me.Label20.Size = New System.Drawing.Size(80, 13)
@@ -1659,7 +1682,7 @@ Partial Class Form1
         '
         Me.Atransdate.CustomFormat = "yyyy-MM-dd"
         Me.Atransdate.Format = System.Windows.Forms.DateTimePickerFormat.Custom
-        Me.Atransdate.Location = New System.Drawing.Point(144, 31)
+        Me.Atransdate.Location = New System.Drawing.Point(252, 31)
         Me.Atransdate.Margin = New System.Windows.Forms.Padding(2)
         Me.Atransdate.Name = "Atransdate"
         Me.Atransdate.Size = New System.Drawing.Size(116, 20)
@@ -1668,7 +1691,7 @@ Partial Class Form1
         '
         'Aserialnum
         '
-        Me.Aserialnum.Location = New System.Drawing.Point(279, 73)
+        Me.Aserialnum.Location = New System.Drawing.Point(469, 77)
         Me.Aserialnum.Margin = New System.Windows.Forms.Padding(2)
         Me.Aserialnum.Name = "Aserialnum"
         Me.Aserialnum.Size = New System.Drawing.Size(259, 20)
@@ -1677,7 +1700,7 @@ Partial Class Form1
         'Label3
         '
         Me.Label3.AutoSize = True
-        Me.Label3.Location = New System.Drawing.Point(140, 177)
+        Me.Label3.Location = New System.Drawing.Point(248, 177)
         Me.Label3.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(85, 13)
@@ -1688,7 +1711,7 @@ Partial Class Form1
         '
         Me.Atype.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.Atype.FormattingEnabled = True
-        Me.Atype.Location = New System.Drawing.Point(144, 154)
+        Me.Atype.Location = New System.Drawing.Point(252, 154)
         Me.Atype.Margin = New System.Windows.Forms.Padding(2)
         Me.Atype.Name = "Atype"
         Me.Atype.Size = New System.Drawing.Size(116, 21)
@@ -1696,7 +1719,7 @@ Partial Class Form1
         '
         'Anotes
         '
-        Me.Anotes.Location = New System.Drawing.Point(280, 114)
+        Me.Anotes.Location = New System.Drawing.Point(470, 118)
         Me.Anotes.Margin = New System.Windows.Forms.Padding(2)
         Me.Anotes.Multiline = True
         Me.Anotes.Name = "Anotes"
@@ -1705,8 +1728,9 @@ Partial Class Form1
         '
         'Acaliber
         '
+        Me.Acaliber.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.Acaliber.FormattingEnabled = True
-        Me.Acaliber.Location = New System.Drawing.Point(144, 71)
+        Me.Acaliber.Location = New System.Drawing.Point(252, 71)
         Me.Acaliber.Margin = New System.Windows.Forms.Padding(2)
         Me.Acaliber.Name = "Acaliber"
         Me.Acaliber.Size = New System.Drawing.Size(116, 21)
@@ -1722,6 +1746,7 @@ Partial Class Form1
         '
         'Amanufacturers
         '
+        Me.Amanufacturers.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.Amanufacturers.FormattingEnabled = True
         Me.Amanufacturers.Location = New System.Drawing.Point(20, 114)
         Me.Amanufacturers.Margin = New System.Windows.Forms.Padding(2)
@@ -1731,7 +1756,7 @@ Partial Class Form1
         '
         'APrice
         '
-        Me.APrice.Location = New System.Drawing.Point(143, 192)
+        Me.APrice.Location = New System.Drawing.Point(251, 192)
         Me.APrice.Margin = New System.Windows.Forms.Padding(2)
         Me.APrice.Name = "APrice"
         Me.APrice.Size = New System.Drawing.Size(117, 20)
@@ -1739,8 +1764,9 @@ Partial Class Form1
         '
         'Amodel
         '
+        Me.Amodel.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.Amodel.FormattingEnabled = True
-        Me.Amodel.Location = New System.Drawing.Point(144, 114)
+        Me.Amodel.Location = New System.Drawing.Point(252, 114)
         Me.Amodel.Margin = New System.Windows.Forms.Padding(2)
         Me.Amodel.Name = "Amodel"
         Me.Amodel.Size = New System.Drawing.Size(116, 21)
@@ -1749,7 +1775,7 @@ Partial Class Form1
         'Label18
         '
         Me.Label18.AutoSize = True
-        Me.Label18.Location = New System.Drawing.Point(18, 53)
+        Me.Label18.Location = New System.Drawing.Point(18, 56)
         Me.Label18.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.Label18.Name = "Label18"
         Me.Label18.Size = New System.Drawing.Size(56, 13)
@@ -1758,6 +1784,7 @@ Partial Class Form1
         '
         'Amancountry
         '
+        Me.Amancountry.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.Amancountry.FormattingEnabled = True
         Me.Amancountry.Location = New System.Drawing.Point(20, 154)
         Me.Amancountry.Margin = New System.Windows.Forms.Padding(2)
@@ -1768,7 +1795,7 @@ Partial Class Form1
         'Label19
         '
         Me.Label19.AutoSize = True
-        Me.Label19.Location = New System.Drawing.Point(17, 140)
+        Me.Label19.Location = New System.Drawing.Point(17, 139)
         Me.Label19.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.Label19.Name = "Label19"
         Me.Label19.Size = New System.Drawing.Size(116, 13)
@@ -1788,7 +1815,7 @@ Partial Class Form1
         'Label17
         '
         Me.Label17.AutoSize = True
-        Me.Label17.Location = New System.Drawing.Point(142, 96)
+        Me.Label17.Location = New System.Drawing.Point(250, 99)
         Me.Label17.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.Label17.Name = "Label17"
         Me.Label17.Size = New System.Drawing.Size(43, 13)
@@ -1808,7 +1835,7 @@ Partial Class Form1
         'Label16
         '
         Me.Label16.AutoSize = True
-        Me.Label16.Location = New System.Drawing.Point(18, 96)
+        Me.Label16.Location = New System.Drawing.Point(18, 99)
         Me.Label16.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.Label16.Name = "Label16"
         Me.Label16.Size = New System.Drawing.Size(77, 13)
@@ -1819,7 +1846,7 @@ Partial Class Form1
         '
         Me.Adeadline.CustomFormat = "yyyy-MM-dd"
         Me.Adeadline.Format = System.Windows.Forms.DateTimePickerFormat.Custom
-        Me.Adeadline.Location = New System.Drawing.Point(373, 31)
+        Me.Adeadline.Location = New System.Drawing.Point(563, 35)
         Me.Adeadline.Margin = New System.Windows.Forms.Padding(2)
         Me.Adeadline.Name = "Adeadline"
         Me.Adeadline.Size = New System.Drawing.Size(116, 20)
@@ -1829,7 +1856,7 @@ Partial Class Form1
         'Label5
         '
         Me.Label5.AutoSize = True
-        Me.Label5.Location = New System.Drawing.Point(277, 12)
+        Me.Label5.Location = New System.Drawing.Point(467, 16)
         Me.Label5.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.Label5.Name = "Label5"
         Me.Label5.Size = New System.Drawing.Size(52, 13)
@@ -1839,7 +1866,7 @@ Partial Class Form1
         'Label15
         '
         Me.Label15.AutoSize = True
-        Me.Label15.Location = New System.Drawing.Point(142, 56)
+        Me.Label15.Location = New System.Drawing.Point(250, 56)
         Me.Label15.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.Label15.Name = "Label15"
         Me.Label15.Size = New System.Drawing.Size(46, 13)
@@ -1849,7 +1876,7 @@ Partial Class Form1
         'Label6
         '
         Me.Label6.AutoSize = True
-        Me.Label6.Location = New System.Drawing.Point(279, 95)
+        Me.Label6.Location = New System.Drawing.Point(469, 103)
         Me.Label6.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.Label6.Name = "Label6"
         Me.Label6.Size = New System.Drawing.Size(38, 13)
@@ -1859,7 +1886,7 @@ Partial Class Form1
         'Label14
         '
         Me.Label14.AutoSize = True
-        Me.Label14.Location = New System.Drawing.Point(141, 139)
+        Me.Label14.Location = New System.Drawing.Point(249, 139)
         Me.Label14.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.Label14.Name = "Label14"
         Me.Label14.Size = New System.Drawing.Size(38, 13)
@@ -1871,7 +1898,7 @@ Partial Class Form1
         Me.Aclear.Location = New System.Drawing.Point(1312, 276)
         Me.Aclear.Margin = New System.Windows.Forms.Padding(2)
         Me.Aclear.Name = "Aclear"
-        Me.Aclear.Size = New System.Drawing.Size(121, 36)
+        Me.Aclear.Size = New System.Drawing.Size(82, 36)
         Me.Aclear.TabIndex = 1
         Me.Aclear.Text = "Clear"
         Me.Aclear.UseVisualStyleBackColor = True
@@ -1879,21 +1906,21 @@ Partial Class Form1
         'Aerror
         '
         Me.Aerror.ForeColor = System.Drawing.SystemColors.ActiveCaptionText
-        Me.Aerror.Location = New System.Drawing.Point(918, 319)
+        Me.Aerror.Location = New System.Drawing.Point(1084, 319)
         Me.Aerror.Margin = New System.Windows.Forms.Padding(2)
         Me.Aerror.Multiline = True
         Me.Aerror.Name = "Aerror"
         Me.Aerror.ReadOnly = True
         Me.Aerror.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
-        Me.Aerror.Size = New System.Drawing.Size(515, 187)
+        Me.Aerror.Size = New System.Drawing.Size(310, 187)
         Me.Aerror.TabIndex = 46
         '
         'Asubmit
         '
-        Me.Asubmit.Location = New System.Drawing.Point(920, 276)
+        Me.Asubmit.Location = New System.Drawing.Point(1084, 276)
         Me.Asubmit.Margin = New System.Windows.Forms.Padding(2)
         Me.Asubmit.Name = "Asubmit"
-        Me.Asubmit.Size = New System.Drawing.Size(370, 36)
+        Me.Asubmit.Size = New System.Drawing.Size(206, 36)
         Me.Asubmit.TabIndex = 0
         Me.Asubmit.Text = "Submit"
         Me.Asubmit.UseVisualStyleBackColor = True
@@ -2394,6 +2421,7 @@ Partial Class Form1
         '
         'Smancountry
         '
+        Me.Smancountry.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.Smancountry.FormattingEnabled = True
         Me.Smancountry.Location = New System.Drawing.Point(15, 388)
         Me.Smancountry.Margin = New System.Windows.Forms.Padding(2)
@@ -2504,6 +2532,7 @@ Partial Class Form1
         '
         'Smodel
         '
+        Me.Smodel.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.Smodel.FormattingEnabled = True
         Me.Smodel.Location = New System.Drawing.Point(137, 351)
         Me.Smodel.Margin = New System.Windows.Forms.Padding(2)
@@ -2513,6 +2542,7 @@ Partial Class Form1
         '
         'Smanufacturer
         '
+        Me.Smanufacturer.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.Smanufacturer.FormattingEnabled = True
         Me.Smanufacturer.Location = New System.Drawing.Point(14, 351)
         Me.Smanufacturer.Margin = New System.Windows.Forms.Padding(2)
@@ -2532,6 +2562,7 @@ Partial Class Form1
         '
         'Scaliber
         '
+        Me.Scaliber.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.Scaliber.FormattingEnabled = True
         Me.Scaliber.Location = New System.Drawing.Point(138, 314)
         Me.Scaliber.Margin = New System.Windows.Forms.Padding(2)
@@ -2550,14 +2581,6 @@ Partial Class Form1
         Me.TabControl1.SelectedIndex = 0
         Me.TabControl1.Size = New System.Drawing.Size(1469, 657)
         Me.TabControl1.TabIndex = 0
-        '
-        'testbox
-        '
-        Me.testbox.Location = New System.Drawing.Point(12, 740)
-        Me.testbox.Multiline = True
-        Me.testbox.Name = "testbox"
-        Me.testbox.Size = New System.Drawing.Size(530, 120)
-        Me.testbox.TabIndex = 8
         '
         'AcqStrip
         '
@@ -2589,24 +2612,51 @@ Partial Class Form1
         Me.ToolStripMenuItem3.Size = New System.Drawing.Size(168, 22)
         Me.ToolStripMenuItem3.Text = "Select Acquisition"
         '
-        'derror
+        'newman
         '
-        Me.derror.ForeColor = System.Drawing.SystemColors.ActiveCaptionText
-        Me.derror.Location = New System.Drawing.Point(953, 327)
-        Me.derror.Margin = New System.Windows.Forms.Padding(2)
-        Me.derror.Multiline = True
-        Me.derror.Name = "derror"
-        Me.derror.ReadOnly = True
-        Me.derror.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
-        Me.derror.Size = New System.Drawing.Size(384, 187)
-        Me.derror.TabIndex = 232
+        Me.newman.Location = New System.Drawing.Point(145, 114)
+        Me.newman.Margin = New System.Windows.Forms.Padding(2)
+        Me.newman.Name = "newman"
+        Me.newman.Size = New System.Drawing.Size(68, 21)
+        Me.newman.TabIndex = 195
+        Me.newman.Text = "New"
+        Me.newman.UseVisualStyleBackColor = True
+        '
+        'newmancountry
+        '
+        Me.newmancountry.Location = New System.Drawing.Point(145, 153)
+        Me.newmancountry.Margin = New System.Windows.Forms.Padding(2)
+        Me.newmancountry.Name = "newmancountry"
+        Me.newmancountry.Size = New System.Drawing.Size(68, 21)
+        Me.newmancountry.TabIndex = 197
+        Me.newmancountry.Text = "New"
+        Me.newmancountry.UseVisualStyleBackColor = True
+        '
+        'newcaliber
+        '
+        Me.newcaliber.Location = New System.Drawing.Point(372, 71)
+        Me.newcaliber.Margin = New System.Windows.Forms.Padding(2)
+        Me.newcaliber.Name = "newcaliber"
+        Me.newcaliber.Size = New System.Drawing.Size(68, 21)
+        Me.newcaliber.TabIndex = 198
+        Me.newcaliber.Text = "New"
+        Me.newcaliber.UseVisualStyleBackColor = True
+        '
+        'newmodel
+        '
+        Me.newmodel.Location = New System.Drawing.Point(372, 114)
+        Me.newmodel.Margin = New System.Windows.Forms.Padding(2)
+        Me.newmodel.Name = "newmodel"
+        Me.newmodel.Size = New System.Drawing.Size(68, 21)
+        Me.newmodel.TabIndex = 199
+        Me.newmodel.Text = "New"
+        Me.newmodel.UseVisualStyleBackColor = True
         '
         'Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(1552, 872)
-        Me.Controls.Add(Me.testbox)
+        Me.ClientSize = New System.Drawing.Size(1486, 690)
         Me.Controls.Add(Me.TabControl1)
         Me.Margin = New System.Windows.Forms.Padding(2)
         Me.Name = "Form1"
@@ -2637,7 +2687,6 @@ Partial Class Form1
         Me.AcqStrip.ResumeLayout(False)
         Me.DispStrip.ResumeLayout(False)
         Me.ResumeLayout(False)
-        Me.PerformLayout()
 
     End Sub
     Public WithEvents TextBox1 As TextBox
@@ -2749,7 +2798,6 @@ Partial Class Form1
     Friend WithEvents Aclear As Button
     Friend WithEvents TabPage1 As TabPage
     Friend WithEvents TabPage2 As TabPage
-    Friend WithEvents testbox As TextBox
     Friend WithEvents GroupBox1 As GroupBox
     Friend WithEvents Label47 As Label
     Friend WithEvents Sphone As TextBox
@@ -2863,4 +2911,8 @@ Partial Class Form1
     Friend WithEvents dtransdate As DateTimePicker
     Friend WithEvents Label77 As Label
     Friend WithEvents derror As TextBox
+    Friend WithEvents newmodel As Button
+    Friend WithEvents newcaliber As Button
+    Friend WithEvents newmancountry As Button
+    Friend WithEvents newman As Button
 End Class
