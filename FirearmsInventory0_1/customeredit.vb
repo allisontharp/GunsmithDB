@@ -2,12 +2,10 @@
 
 Public Class customeredit
     Public conn
-    Public constr As String = "database=firearms;data source=76.74.170.191;" _
-        & "user id=vb;password=zsxdcf"
+
+    Public constr = Form1.constr
 
     Private Sub customeredit_Load(sender As System.Object, e As System.EventArgs) Handles MyBase.Load
-        'Dim constr As String = "database=firearms;data source=76.74.170.191;" _
-        '& "user id=vb;password=zsxdcf"
         Try
             conn = New MySqlConnection
             conn.ConnectionString = constr
@@ -99,6 +97,16 @@ Public Class customeredit
             change += vbCrLf + "State from " + SCstate.Text + " to " + Cstate.Text
         End If
 
+        If Not Czip.Text = SCzip.Text Then
+            If Not check Then
+                query += " zip = @zip"
+            Else
+                query += " ,zip = @zip"
+            End If
+            check = True
+            change += vbCrLf + "Zipcode from " + SCzip.Text + " to " + Czip.Text
+        End If
+
         If Not Clicensenum.Text = SClicensenum.Text Then
             If Not check Then
                 query += " licensenum = @licensenum"
@@ -106,7 +114,7 @@ Public Class customeredit
                 query += " ,licensenum = @licensenum"
             End If
             check = True
-            change += vbCrLf + "License number from " + SClicensenum.Text + " to " + Clicensenum.Text
+            change += vbCrLf + "License number from " + SClicensenum.Text + " To " + Clicensenum.Text
         End If
 
         If Not Cphonenumber.Text = SCPhonenumber.Text Then
@@ -116,7 +124,7 @@ Public Class customeredit
                 query += " ,phone_number = @phone"
             End If
             check = True
-            change += vbCrLf + "Phone number from " + SCPhonenumber.Text + " to " + Cphonenumber.Text
+            change += vbCrLf + "Phone number from " + SCPhonenumber.Text + " To " + Cphonenumber.Text
         End If
 
 
@@ -153,6 +161,10 @@ Public Class customeredit
             cmd.Parameters.AddWithValue("@state", Cstate.Text)
         End If
 
+        If Not Czip.Text = SCzip.Text Then
+            cmd.Parameters.AddWithValue("@zip", Czip.Text)
+        End If
+
         If Not Clicensenum.Text = SClicensenum.Text Then
             cmd.Parameters.AddWithValue("@licesenum", Clicensenum.Text)
         End If
@@ -172,7 +184,8 @@ Public Class customeredit
 
             conn.Close()
 
-            MsgBox("submitted")
+            MsgBox("Submitted")
+            Form1.Csearchbtn.PerformClick()
             Me.Close()
         End If
     End Sub

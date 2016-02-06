@@ -215,7 +215,7 @@ Partial Class changecustomerform
         '
         Me.ACstate.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.ACstate.FormattingEnabled = True
-        Me.ACstate.Items.AddRange(New Object() {"AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "DC", "FL", "GA", "HI", "ID", "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MT", "NE", "NV", "NH", "NJ", "NM", "NY", "NC", "ND", "OH", "OK", "OR", "MD", "MA", "MI", "MN", "MS", "MO", "PA", "RI", "SC", "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WV", "WI", "WY"})
+        Me.ACstate.Items.AddRange(New Object() {"AK", "AL", "AR", "AZ", "CA", "CO", "CT", "DE", "FL", "GA", "HI", "IA", "ID", "IL", "IN", "KS", "KY", "LA", "MA", "MD", "ME", "MI", "MN", "MO", "MS", "MT", "NC", "ND", "NE", "NH", "NJ", "NM", "NV", "NY", "OH", "OK", "OR", "PA", "RI", "SC", "SD", "TN", "TX", "UT", "VA", "VT", "WA", "WI", "WV", "WY"})
         Me.ACstate.Location = New System.Drawing.Point(137, 169)
         Me.ACstate.Name = "ACstate"
         Me.ACstate.Size = New System.Drawing.Size(58, 21)
@@ -544,7 +544,7 @@ Partial Class changecustomerform
         Me.Controls.Add(Me.csearch_grid)
         Me.Controls.Add(Me.scustomer_group)
         Me.Name = "changecustomerform"
-        Me.Text = "changecustomerform"
+        Me.Text = "Change Customer"
         CType(Me.csearch_grid, System.ComponentModel.ISupportInitialize).EndInit()
         Me.scustomer_group.ResumeLayout(False)
         Me.scustomer_group.PerformLayout()

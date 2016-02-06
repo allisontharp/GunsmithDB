@@ -1,6 +1,13 @@
 ﻿Imports MySql.Data.MySqlClient
+Imports System.Drawing
+Imports System.Text.RegularExpressions
 
-' should check which tab is selected for acquisition/disposition
+'TODO edit transactions (acq and dis)
+'TODO add required note when editing transaction and customer
+'TODO ability to see disposition's acquisition
+'TODO switch to see disposed acquisitions or not in search
+'TODO make sure database is on correct time (it isn't right now)
+
 Public Class Form1
     Public conn As New MySqlConnection
     'MySqlCommand It represents a SQL statement to execute against a MySQL Database
@@ -8,40 +15,25 @@ Public Class Form1
     'Represents a set of data commands and a database connection that 
     'are used to fill a dataset and update a MySQL database. This class cannot be inherited.
     Dim da As New MySqlDataAdapter
+    Dim functioninput As Boolean = False
 
     Public constr As String = "database=firearms;data source=76.74.170.191;" _
         & "user id=vb;password=zsxdcf"
     Public customer_id As String
-    'Public Sub connect()
-    '    Dim DatabaseName As String = "firearms"
-    '    Dim server As String = "76.74.170.191"
-    '    Dim userName As String = "vb"
-    '    Dim password As String = "zsxdcf"
-    '    If Not conn Is Nothing Then conn.Close()
-    '    conn.ConnectionString = String.Format("server={0}; user id={1}; password={2}; database={3}; pooling=false", server, userName, password, DatabaseName)
-    '    Try
-    '        conn.Open()
 
-    '        'MsgBox("Connected")
-    '    Catch ex As Exception
-    '        MsgBox(ex.Message)
-    '    End Try
-    '    conn.Close()
-    'End Sub
 
-    ''' <summary>
-    ''' 
-    ''' </summary>
-    ''' <param name="sender"></param>
-    ''' <param name="e"></param>
     Private Sub Form1_Load(sender As System.Object, e As System.EventArgs) Handles MyBase.Load
-        'Dim constr As String = "database=firearms;data source=76.74.170.191;" _
-        '& "user id=vb;password=zsxdcf"
+        Try
+            conn.Close()
+        Catch ex As Exception
+
+        End Try
+
         Try
             conn.ConnectionString = constr
             conn.Open()
         Catch ex As MySqlException
-            MsgBox(ex.Message)
+            MsgBox("An Error Occurred. " & ex.Number & “ – “ & ex.Message)
         End Try
 
         cbfill("SELECT name FROM type", "type", "name", Atype)
@@ -65,6 +57,7 @@ Public Class Form1
         AAcquired.Value = DateTime.Now
         Atransdate.Value = DateTime.Now
         Adeadline.Value = DateTime.Now
+        dtransdate.Value = DateTime.Now
 
         adeadline_no.Checked = True
         Adeadline.Visible = False
@@ -72,9 +65,7 @@ Public Class Form1
         scustomer_group.Visible = False
 
         allcb.Checked = True
-
-
-
+        conn.Close()
     End Sub
 
     Public Sub cbfill(sStmt As String, table As String, row As String, combobox As ComboBox)
@@ -88,21 +79,21 @@ Public Class Form1
             combobox.DisplayMember = row 'What is displayed
             combobox.ValueMember = row 'The ID of the row
         End If
-
-
-
         combobox.SelectedIndex = -1
     End Sub
 
 
 
     Private Function mysqlquery(stmt As String)
-        'Dim cs As String = "Database=firearms;Data Source=76.74.170.191;" _
-        '& "User Id=vb;Password=zsxdcf"
+        Try
+            conn.Close()
+        Catch ex As Exception
+
+        End Try
+
         Try
             conn = New MySqlConnection(constr)
             conn.Open()
-
 
 
             Dim cmd As MySqlCommand = New MySqlCommand(stmt, conn)
@@ -110,10 +101,8 @@ Public Class Form1
 
             While reader.Read
                 If IsDBNull(reader) Then
-                    ' Anotes.Text = "its empty"
                     Return ("empty")
                 Else
-                    ' Anotes.Text = "it isn't empty " + reader.GetString(0)
                     Return reader.GetString(0)
                 End If
             End While
@@ -131,20 +120,22 @@ Public Class Form1
 
 
     Public Sub mysqlsubmit(table As String, cols As String, val As String)
-        Dim cs As String = "Database=firearms;Data Source=76.74.170.191;" _
-        & "User Id=vb;Password=zsxdcf"
         Dim stm As String = "INSERT INTO " + table + " (" + cols + ") VALUES (" + val + ");"
+        Try
+            conn.Close()
+        Catch ex As Exception
 
+        End Try
 
         Try
-            conn = New MySqlConnection(cs)
+            conn = New MySqlConnection(constr)
             conn.Open()
             Dim cmd As MySqlCommand = New MySqlCommand(stm, conn)
             cmd.ExecuteScalar()
 
 
         Catch ex As MySqlException
-            TextBox1.Text = ex.ToString()
+            MsgBox("An Error Occurred. " & ex.Number & “ – “ & ex.Message)
         Finally
             conn.Close()
         End Try
@@ -177,51 +168,79 @@ Public Class Form1
     End Sub
 
     Private Sub Caddbtn_Click(sender As Object, e As EventArgs) Handles Caddbtn.Click
-
+        'TODO make sure inputs are legal before adding
         Dim errmsg As String = ""
 
+        Dim submitquery = "INSERT INTO customer (customer_id, firstname, lastname, address1, city, state, zip, phone_number, licensenum"
 
-        'If ACcompany.Text = "" Then
-        '    If ACfname.Text = "" And AClname.Text = "" Then
-        '        errmsg += vbCrLf + "Name"
-        '    End If
-        'End If
-
-        'If Not ACfname.Text = "" Then
-        '    If AClname.Text = "" Then
-        '        errmsg += vbCrLf + "Last Name"
-        '    End If
-        'Else
-        '    If Not AClname.Text = "" Then
-        '        errmsg += vbCrLf + "First Name"
-        '    End If
-        'End If
+        Dim queryvalues As String = "VALUES (NULL, @firstname, @lastname, @address1, @city, @state, @zip, @phone_number, @licensenum"
 
 
-        'If ACaddress1.Text = "" Then
-        '    errmsg += vbCrLf + "Address"
-        'End If
+        Try
+            conn.Close()
+            conn.Open()
+        Catch ex As MySqlException
+            MsgBox("An Error Occurred. " & ex.Number & “ – “ & ex.Message)
+            Return
+        End Try
 
-        'If ACcity.Text = "" Then
-        '    errmsg += vbCrLf + "City"
-        'End If
 
-        'If ACstate.Text = "" Then
-        '    errmsg += vbCrLf + "State"
-        'End If
+        If ACcompany.Text = "" Then
+            If ACfname.Text = "" And AClname.Text = "" Then
+                errmsg += vbCrLf + "Name"
+            End If
+        Else
+            submitquery += ",company"
+            queryvalues += ",@company"
+        End If
 
-        'If ACzip.Text = "" Then
-        '    errmsg += vbCrLf + "Zip"
-        'End If
+        If Not ACfname.Text = "" Then
+            If AClname.Text = "" Then
+                errmsg += vbCrLf + "Last Name"
+            End If
+        Else
+            If Not AClname.Text = "" Then
+                errmsg += vbCrLf + "First Name"
+            End If
+        End If
 
-        'If AClicensenum.Text = "" Then
-        '    errmsg += vbCrLf + "License Number"
-        'End If
 
+        If ACaddress1.Text = "" Then
+            errmsg += vbCrLf + "Address"
+        End If
+
+        If Not ACaddress2.Text = "" Then
+            submitquery += ",address2"
+            queryvalues += ",@address2"
+        End If
+
+        If ACcity.Text = "" Then
+            errmsg += vbCrLf + "City"
+        End If
+
+        If ACstate.Text = "" Then
+            errmsg += vbCrLf + "State"
+        End If
+
+        ' If ACzip.Text = "" Or Not Len(ACzip.Text) = 5 Or Not Regex.IsMatch(ACzip.Text, "^[0-9]+$") Then
+        If Not Regex.IsMatch(ACzip.Text, "^([\d]){5}$") Then
+            errmsg += vbCrLf + "Zip (5 digit)"
+        End If
+
+        If AClicensenum.Text = "" Then
+            errmsg += vbCrLf + "License Number"
+        End If
+
+        If Not Regex.IsMatch(ACphone.Text, "^^([\d]){10}$") Then '
+            ' not a valid phone number
+            errmsg += vbCrLf + "Phone Number (10 digits)"
+        End If
+
+        submitquery += ") " + queryvalues + ")"
 
         If errmsg Is String.Empty Then
-            conn.Open()
             ' search for the customer first
+
             Dim query As String = "SELECT firstname, lastname, address1, city, state, zip, licensenum, phone_number FROM customer WHERE licensenum like @licensenum"
             Dim cmd = New MySqlCommand(query, conn)
 
@@ -242,29 +261,32 @@ Public Class Form1
                 'license number not found
                 reader.Close()
 
-                Aerror.Text = "license number not found"
 
-                query = "SELECT firstname, lastname, address1, city, state, zip, licensenum, phone_number FROM customer WHERE firstname like @firstname AND lastname like @lastname"
+                query = "SELECT firstname, lastname, address1, city, state, zip, licensenum, phone_number FROM customer WHERE firstname like @firstname AND lastname like @lastname AND city like @city AND 
+                            state like @state"
                 cmd = New MySqlCommand(query, conn)
 
                 cmd.Parameters.AddWithValue("@firstname", ACfname.Text)
                 cmd.Parameters.AddWithValue("@lastname", AClname.Text)
+                cmd.Parameters.AddWithValue("@city", ACcity.Text)
+                cmd.Parameters.AddWithValue("@state", ACstate.Text)
 
-
-                reader = cmd.ExecuteReader()
+                Try
+                    reader = cmd.ExecuteReader()
+                Catch ex As MySqlException
+                    MsgBox("An Error Occurred. " & ex.Number & “ – “ & ex.Message)
+                    Return
+                End Try
 
                 If reader.Read() Then
                     'name found
 
                     ' change from msgbox to a box with buttons: edit customer, cancel
-                    MsgBox("Customer already exists in the database.  Check the license number." + vbCrLf + vbCrLf + reader.GetString(0) + " " + reader.GetString(1) + vbCrLf + reader.GetString(2) + vbCrLf + reader.GetString(3) + ", " + reader.GetString(4) _
-                           , MsgBoxStyle.YesNo)
-
+                    MsgBox("Customer already exists in the database with that name, city, and state.  Check the license number." + vbCrLf + vbCrLf + reader.GetString(0) + " " + reader.GetString(1) + vbCrLf + reader.GetString(2) + vbCrLf + reader.GetString(3) + ", " + reader.GetString(4))
+                    reader.Close()
                 Else
                     'name not found, check address
                     reader.Close()
-
-                    Aerror.Text = "license number not found, name not found"
 
                     query = "SELECT firstname, lastname, address1, city, state, zip, licensenum FROM customer WHERE address1 like @address1 AND city like @city AND state like @state AND zip LIKE @zip"
                     cmd = New MySqlCommand(query, conn)
@@ -274,22 +296,27 @@ Public Class Form1
                     cmd.Parameters.AddWithValue("@state", ACstate.Text)
                     cmd.Parameters.AddWithValue("@zip", ACzip.Text)
 
-                    reader = cmd.ExecuteReader()
+
+                    Try
+                        reader = cmd.ExecuteReader()
+                    Catch ex As MySqlException
+                        MsgBox("An Error Occurred. " & ex.Number & “ – “ & ex.Message)
+                        Return
+                    End Try
 
                     If reader.Read() Then
                         'address found
-                        MsgBox("Customer already exists in the database with that license number and address.  Check the name and license number." + vbCrLf + vbCrLf + reader.GetString(0) + " " + reader.GetString(1) + vbCrLf + reader.GetString(2) + vbCrLf + reader.GetString(3) + ", " + reader.GetString(4) _
-                           , MsgBoxStyle.YesNo)
-
+                        MsgBox("Customer already exists in the database with that license number and address.  Check the name and license number." + vbCrLf + vbCrLf + reader.GetString(0) + " " + reader.GetString(1) + vbCrLf + reader.GetString(2) + vbCrLf + reader.GetString(3) + ", " + reader.GetString(4))
+                        reader.Close()
                     Else
                         ' new customer!
                         reader.Close()
 
-                        '!!!!! need to check somewhere before this to see if it was a customer or if it was a first/last name and do the appropriate things !!!!
-                        query = "INSERT INTO customer (customer_id, firstname, lastname, address1, city, state, zip, phone_number, licensenum) VALUES 
-                                (NULL, @firstname, @lastname, @address1, @city, @state, @zip, @phone_number, @licensenum)"
-                        cmd = New MySqlCommand(query, conn)
+                        'query = "INSERT INTO customer (customer_id, firstname, lastname, address1, city, state, zip, phone_number, licensenum) VALUES 
+                        '        (NULL, @firstname, @lastname, @address1, @city, @state, @zip, @phone_number, @licensenum)"
 
+
+                        cmd = New MySqlCommand(submitquery, conn)
                         cmd.Parameters.AddWithValue("@firstname", ACfname.Text)
                         cmd.Parameters.AddWithValue("@lastname", AClname.Text)
                         cmd.Parameters.AddWithValue("@address1", ACaddress1.Text)
@@ -299,25 +326,47 @@ Public Class Form1
                         cmd.Parameters.AddWithValue("@licensenum", AClicensenum.Text)
                         cmd.Parameters.AddWithValue("@phone_number", ACphone.Text)
 
-                        Aerror.Text = query
-                        cmd.ExecuteNonQuery()
+                        If Not ACcompany.Text = "" Then
+                            cmd.Parameters.AddWithValue("@company", ACcompany.Text)
+                        End If
 
-                        conn.Close()
+                        If Not ACaddress2.Text = "" Then
+                            cmd.Parameters.AddWithValue("@address2", ACaddress2.Text)
+                        End If
 
-                        Aerror.Text = "submitted New customer"
+                        Try
+                            cmd.ExecuteNonQuery()
+                            conn.Close()
+                        Catch ex As MySqlException
+                            MsgBox("An Error Occurred! " & ex.Number & “ – “ & ex.Message)
+                            Return
+                        End Try
+
+                        functioninput = True
+                        Csearchbtn.PerformClick()
+                        'Threading.Thread.Sleep(1000)
+
+
+                        'TODO this is erroring out
+                        'SelectCustomerAcqFunction()
+
+
+                        Aerror.Text = "New customer submitted"
 
                     End If
-
-
                 End If
-
-
             End If
 
-            reader.Close()
         Else
-                Aerror.Text = "The following need To be completed:    " + errmsg
+            Aerror.Text = "The following need to be completed:     " + errmsg
         End If
+
+        Try
+            conn.Close()
+        Catch ex As Exception
+            Return
+        End Try
+
     End Sub
 
     Private Sub Asubmit_Click(sender As Object, e As EventArgs) Handles Asubmit.Click
@@ -331,6 +380,17 @@ Public Class Form1
 
         Dim errmsg As String = ""
 
+        Try
+            conn.Close()
+        Catch ex As Exception
+
+        End Try
+
+        Try
+            conn.Open()
+        Catch ex As MySqlException
+            MsgBox("An Error Occurred. " & ex.Number & “ – “ & ex.Message)
+        End Try
 
         ' check that required things are filled out, vbcr if label, vbcrlf if textobx
         If SCcustomer_id.Text = "cid" Then
@@ -338,80 +398,83 @@ Public Class Form1
         End If
 
         If cat_id Is Nothing Then
-            errmsg += vbCrLf + "category"
+            errmsg += vbCrLf + "Category"
         End If
 
         If type_id Is Nothing Then
-            errmsg += vbCrLf + "type"
+            errmsg += vbCrLf + "Type"
         End If
 
         If cal_id Is Nothing Then
-            errmsg += vbCrLf + "caliber"
+            errmsg += vbCrLf + "Caliber"
         End If
 
         If man_id Is Nothing Then
-            errmsg += vbCrLf + "manufacturer"
+            errmsg += vbCrLf + "Manufacturer"
         End If
 
         If model_id Is Nothing Then
-            errmsg += vbCrLf + "model"
+            errmsg += vbCrLf + "Model"
         End If
 
         If mancountry_id Is Nothing Then
-            errmsg += vbCrLf + "manufacturer country"
+            errmsg += vbCrLf + "Manufacturer country"
         End If
 
 
         If Aserialnum.Text = "" Then
-            errmsg += vbCrLf + "serial number"
+            errmsg += vbCrLf + "Serial number"
         End If
 
 
 
         If SCfname.Text = "" And SClname.Text = "" And SCcompany.Text = "" Then
-            errmsg += vbCrLf + "first name and last name or company name"
+            errmsg += vbCrLf + "First name and last name or company name"
         ElseIf SCfname.Text = "" And Not SClname.Text = "" Then
-            errmsg += "first name"
+            errmsg += "First name"
         ElseIf SClname.Text = "" And Not SCfname.Text = "" Then
-            errmsg += "last name"
+            errmsg += "Last name"
         End If
 
 
 
 
         If errmsg Is String.Empty Then
-            conn.Open()
-            'Dim query As String = "INSERT INTO gun (gun_id, type_id, cal_id, man_id, model_id, mancountry_id, serialnum, date_entered, year, cat_id, deadline, note) VALUES 
-            '   (NULL, @type_id, @cal_id, @man_id, @model_id, @mancountry_id, @serialnum, NOW(), @year, @cat_id, @deadline, @note)"
+
             Dim query As String = "INSERT INTO gun (gun_id, type_id, cal_id, man_id, model_id, mancountry_id, serialnum, date_entered, cat_id"
+            Dim queryvalues As String = "Values (NULL, @type_id, @cal_id, @man_id, @model_id, @mancountry_id, @serialnum, NOW(), @cat_id"
 
             If Not Ayear.Text = "" Then
                 query += ", year"
+                queryvalues += ", @year"
             End If
 
             If adeadline_yes.Checked Then
                 query += ", deadline"
+                queryvalues += ", @deadline"
             End If
 
             If Not Anotes.Text = "" Then
                 query += ", note"
+                queryvalues += ", @note"
             End If
 
-            query += ") VALUES (NULL, @type_id, @cal_id, @man_id, @model_id, @mancountry_id, @serialnum, NOW(), @cat_id"
+            query += ") " + queryvalues + ")"
+            '  query += ") VALUES (NULL, @type_id, @cal_id, @man_id, @model_id, @mancountry_id, @serialnum, NOW(), @cat_id"
 
-            If Not Ayear.Text = "" Then
-                query += ", @year"
-            End If
+            'If Not Ayear.Text = "" Then
+            '    query += ", @year"
+            'End If
 
-            If adeadline_yes.Checked Then
-                query += ", @deadline"
-            End If
+            'If adeadline_yes.Checked Then
+            '    query += ", @deadline"
+            'End If
 
-            If Not Anotes.Text = "" Then
-                query += ", @note"
-            End If
+            'If Not Anotes.Text = "" Then
+            '    query += ", @note"
+            'End If
 
-            query += ")"
+            'query += ")"
 
 
             Dim cmd = New MySqlCommand(query, conn)
@@ -423,11 +486,29 @@ Public Class Form1
             cmd.Parameters.AddWithValue("@mancountry_id", mancountry_id)
             cmd.Parameters.AddWithValue("@serialnum", Aserialnum.Text)
             cmd.Parameters.AddWithValue("@cat_id", cat_id)
-            cmd.Parameters.AddWithValue("@deadline", Adeadline.Value)
-            cmd.Parameters.AddWithValue("@note", Anotes.Text)
-            cmd.Parameters.AddWithValue("@year", Ayear.Text)
+            If adeadline_yes.Checked Then
+                cmd.Parameters.AddWithValue("@deadline", Adeadline.Value)
+            End If
 
-            cmd.ExecuteNonQuery()
+            If Not Anotes.Text = "" Then
+                cmd.Parameters.AddWithValue("@note", Anotes.Text)
+            End If
+
+            If Not Ayear.Text = "" Then
+                cmd.Parameters.AddWithValue("@year", Ayear.Text)
+            End If
+
+
+            MsgBox(query)
+
+
+            Try
+                cmd.ExecuteNonQuery()
+            Catch ex As MySqlException
+                Aerror.Text = ex.ToString()
+            Finally
+
+            End Try
 
             query = "Select LAST_INSERT_ID()"
             cmd = New MySqlCommand(query, conn)
@@ -436,16 +517,26 @@ Public Class Form1
 
             Dim gun_id As String
 
-            While reader.Read()
-                gun_id = reader.GetString(0)
-            End While
+            Try
+                While reader.Read()
+                    gun_id = reader.GetString(0)
+                End While
 
-            reader.Close()
+                MsgBox(gun_id)
+                reader.Close()
+
+            Catch ex As MySqlException
+                Aerror.Text = ex.ToString()
+                Return
+            Finally
+                reader.Close()
+            End Try
+
 
 
 
             query = "INSERT INTO acquisition (acq_id, acq_date, customer_id, gun_id, transaction_date, date_entered) VALUES
-                        (NULL, @acq_date, @customer_id, @gun_id, @transaction_date, NOW())"
+                    (NULL, @acq_date, @customer_id, @gun_id, @transaction_date, NOW())"
 
             cmd = New MySqlCommand(query, conn)
 
@@ -454,62 +545,76 @@ Public Class Form1
             cmd.Parameters.AddWithValue("@gun_id", gun_id)
             cmd.Parameters.AddWithValue("@transaction_date", Atransdate.Value)
 
-            cmd.ExecuteNonQuery()
+            Try
+                cmd.ExecuteNonQuery()
+            Catch ex As MySqlException
+                Aerror.Text = ex.ToString()
+            Finally
+            End Try
 
-
-
-            conn.Close()
-
-            Aerror.Text = "submitted"
+            Aerror.Text = "Acquisition submitted"
         Else
             Aerror.Text = "The following need to be completed:  " + errmsg
         End If
 
 
-
+        conn.Close()
 
     End Sub
 
     Private Sub Csearch_Click(sender As Object, e As EventArgs) Handles Ssearch.Click
-        'Dim query As String = "SELECT customer.customer_id, customer.firstname AS FirstName, customer.lastname AS LastName, customer.company AS Company, customer.address1,
+        'Dim query As String = "SELECT customer.customer_id, acquisition.acq_id, customer.firstname AS FirstName, customer.lastname AS LastName, customer.company AS Company, customer.address1,
         '                        customer.address2, customer.city, customer.state, customer.zip, customer.licensenum, customer.phone_number,
         '                        manufacturers.name AS Manufacturer, models.name AS Model, caliber.name AS Caliber, gun.serialnum AS SerialNumber, 
         '                        acquisition.transaction_date FROM gun 
         '                        LEFT JOIN acquisition 
         '                                INNER JOIN customer ON acquisition.customer_id = customer.customer_id  
-        '                        ON gun.gun_id = acquisition.gun_id 
+        '                        ON gun.gun_id = acquisition.gun_id  
+        '                        LEFT JOIN disposition ON gun.gun_id = disposition.gun_id 
         '                        LEFT JOIN manufacturers ON gun.man_id = manufacturers.man_id 
         '                        LEFT JOIN models ON gun.model_id = models.model_id 
         '                        LEFT JOIN category ON gun.cat_id = category.cat_id
         '                        LEFT JOIN type ON gun.type_id = type.type_id
         '                        LEFT JOIN mancountry ON gun.mancountry_id = mancountry.mancountry_id
-        '                        LEFT JOIN caliber ON gun.cal_id = caliber.cal_id WHERE "
-
-        Dim query As String = "SELECT customer.customer_id, customer.firstname AS FirstName, customer.lastname AS LastName, customer.company AS Company, customer.address1,
+        '                        LEFT JOIN caliber ON gun.cal_id = caliber.cal_id 
+        '                        WHERE disposition.gun_id IS NULL 
+        '                        "
+        Dim query As String = "SELECT customer.customer_id, acquisition.acq_id, customer.firstname AS FirstName, customer.lastname AS LastName, customer.company AS Company, customer.address1,
                                 customer.address2, customer.city, customer.state, customer.zip, customer.licensenum, customer.phone_number,
                                 manufacturers.name AS Manufacturer, models.name AS Model, caliber.name AS Caliber, gun.serialnum AS SerialNumber, 
                                 acquisition.transaction_date FROM gun 
-                                LEFT JOIN acquisition 
+                                RIGHT JOIN acquisition 
                                         INNER JOIN customer ON acquisition.customer_id = customer.customer_id  
                                 ON gun.gun_id = acquisition.gun_id  
-                                LEFT JOIN disposition ON gun.gun_id = disposition.gun_id 
                                 LEFT JOIN manufacturers ON gun.man_id = manufacturers.man_id 
                                 LEFT JOIN models ON gun.model_id = models.model_id 
                                 LEFT JOIN category ON gun.cat_id = category.cat_id
                                 LEFT JOIN type ON gun.type_id = type.type_id
                                 LEFT JOIN mancountry ON gun.mancountry_id = mancountry.mancountry_id
                                 LEFT JOIN caliber ON gun.cal_id = caliber.cal_id 
-                                WHERE disposition.gun_id IS NULL 
                                 "
-        'Dim obj As New search
+        Try
+            conn.Close()
+        Catch ex As Exception
+        End Try
+
+        Try
+            conn.Open()
+        Catch ex As MySqlException
+            MsgBox("An Error Occurred. " & ex.Number & “ – “ & ex.Message)
+        End Try
+
         Dim adap As MySqlDataAdapter = New MySqlDataAdapter(query, conn)
         Dim ds As New DataSet()
-        Dim check As Boolean = True
+        Dim check As Boolean = False
+        Dim trans_check As Boolean = False
 
+        acq_grid.DataSource = Nothing
+        dis_grid.DataSource = Nothing
 
         If Not Sfname.Text = "" Then
             If Not check Then
-                query += " firstname LIKE @firstname"
+                query += " WHERE firstname LIKE @firstname"
             Else
                 query += " AND firstname LIKE @firstname"
             End If
@@ -518,7 +623,7 @@ Public Class Form1
 
         If Not Slname.Text = "" Then
             If Not check Then
-                query += " lastname LIKE @lastname"
+                query += " WHERE lastname LIKE @lastname"
             Else
                 query += " AND lastname LIKE @lastname"
             End If
@@ -527,7 +632,7 @@ Public Class Form1
 
         If Not Scname.Text = "" Then
             If Not check Then
-                query += " company LIKE @company"
+                query += " WHERE company LIKE @company"
             Else
                 query += " AND company LIKE @company"
             End If
@@ -536,7 +641,7 @@ Public Class Form1
 
         If Not Saddress1.Text = "" Then
             If Not check Then
-                query += " address1 LIKE @address1"
+                query += " WHERE address1 LIKE @address1"
             Else
                 query += " AND address1 LIKE @address1"
             End If
@@ -545,7 +650,7 @@ Public Class Form1
 
         If Not Saddress2.Text = "" Then
             If Not check Then
-                query += " address2 LIKE @address2"
+                query += " WHERE address2 LIKE @address2"
             Else
                 query += " AND address2 LIKE @address2"
             End If
@@ -554,7 +659,7 @@ Public Class Form1
 
         If Not Scity.Text = "" Then
             If Not check Then
-                query += " city LIKE @city"
+                query += " WHERE city LIKE @city"
             Else
                 query += " AND city LIKE @city"
             End If
@@ -563,7 +668,7 @@ Public Class Form1
 
         If Not Sstate.Text = "" Then
             If Not check Then
-                query += " state LIKE @state"
+                query += " WHERE state LIKE @state"
             Else
                 query += " AND state LIKE @state"
             End If
@@ -572,7 +677,7 @@ Public Class Form1
 
         If Not Szip.Text = "" Then
             If Not check Then
-                query += " zip LIKE @zip"
+                query += " WHERE zip LIKE @zip"
             Else
                 query += " AND zip LIKE @zip"
             End If
@@ -581,7 +686,7 @@ Public Class Form1
 
         If Not Slicensenum.Text = "" Then
             If Not check Then
-                query += " licensenum LIKE @licensenum"
+                query += " WHERE licensenum LIKE @licensenum"
             Else
                 query += " AND licensenum LIKE @licensenum"
             End If
@@ -590,7 +695,7 @@ Public Class Form1
 
         If Not Sphone.Text = "" Then
             If Not check Then
-                query += " phone_number LIKE @phone_number"
+                query += " WHERE phone_number LIKE @phone_number"
             Else
                 query += " AND phone_number LIKE @phone_number"
             End If
@@ -599,7 +704,7 @@ Public Class Form1
 
         If Not Scat.Text = "" Then
             If Not check Then
-                query += " category.name LIKE @scat"
+                query += " WHERE category.name LIKE @scat"
             Else
                 query += " AND category.name LIKE @scat"
             End If
@@ -608,7 +713,7 @@ Public Class Form1
 
         If Not Stype.Text = "" Then
             If Not check Then
-                query += " type.name LIKE @stype"
+                query += " WHERE type.name LIKE @stype"
             Else
                 query += " AND type.name LIKE @stype"
             End If
@@ -617,7 +722,7 @@ Public Class Form1
 
         If Not Scaliber.Text = "" Then
             If Not check Then
-                query += " caliber.name LIKE @scaliber"
+                query += " WHERE caliber.name LIKE @scaliber"
             Else
                 query += " AND caliber.name LIKE @scaliber"
             End If
@@ -626,7 +731,7 @@ Public Class Form1
 
         If Not Smanufacturer.Text = "" Then
             If Not check Then
-                query += " manufacturers.name LIKE @smanufacturer"
+                query += " WHERE manufacturers.name LIKE @smanufacturer"
             Else
                 query += " AND manufacturers.name LIKE @smanufacturer"
             End If
@@ -635,7 +740,7 @@ Public Class Form1
 
         If Not Smodel.Text = "" Then
             If Not check Then
-                query += " models.name LIKE @smodel"
+                query += " WHERE models.name LIKE @smodel"
             Else
                 query += " AND models.name LIKE @smodel"
             End If
@@ -644,7 +749,7 @@ Public Class Form1
 
         If Not Smancountry.Text = "" Then
             If Not check Then
-                query += " mancountry.name LIKE @smancountry"
+                query += " WHERE mancountry.name LIKE @smancountry"
             Else
                 query += " AND mancountry.name LIKE @smancountry"
             End If
@@ -653,25 +758,25 @@ Public Class Form1
 
         If Not Syear.Text = "" Then
             If Not check Then
-                query += " gun.year LIKE @syear"
+                query += " WHERE gun.year LIKE @syear"
             Else
                 query += " AND gun.year LIKE @syear"
             End If
             check = True
         End If
 
-        If Not Spurchase_price.Text = "" Then
-            If Not check Then
-                query += " acquisition.purchase_price LIKE @spurchase_price"
-            Else
-                query += " AND acquisition.purchase_price LIKE @spurchase_price"
-            End If
-            check = True
-        End If
+        'If Not Spurchase_price.Text = "" Then
+        '    If Not check Then
+        '        query += " WHERE acquisition.purchase_price LIKE @spurchase_price"
+        '    Else
+        '        query += " AND acquisition.purchase_price LIKE @spurchase_price"
+        '    End If
+        '    check = True
+        'End If
 
         If Not Sserialnum.Text = "" Then
             If Not check Then
-                query += " gun.serialnum LIKE @sserialnum"
+                query += " WHERE gun.serialnum LIKE @sserialnum"
             Else
                 query += " AND gun.serialnum LIKE @sserialnum"
             End If
@@ -752,43 +857,50 @@ Public Class Form1
             adap.SelectCommand.Parameters.AddWithValue("@syear", "%" + Syear.Text + "%")
         End If
 
-        If Not Spurchase_price.Text = "" Then
-            adap.SelectCommand.Parameters.AddWithValue("@spurchase_price", "%" + Spurchase_price.Text + "%")
-        End If
+        'If Not Spurchase_price.Text = "" Then
+        '    adap.SelectCommand.Parameters.AddWithValue("@spurchase_price", "%" + Spurchase_price.Text + "%")
+        'End If
 
         If Not Sserialnum.Text = "" Then
             adap.SelectCommand.Parameters.AddWithValue("@sserialnum", "%" + Sserialnum.Text + "%")
         End If
 
 
-        Try
-            adap.Fill(ds)
+        adap.Fill(ds)
+        If ds.Tables(0).Rows.Count > 0 Then
+            Try
+                acq_grid.DataSource = ds.Tables(0)
+                ds = Nothing
+                da = Nothing
+                acq_grid.Columns("customer_id").Visible = False
+                acq_grid.Columns("acq_id").Visible = False
 
-            'obj.acq_grid.DataSource = ds.Tables(0)
-            acq_grid.DataSource = ds.Tables(0)
-            ds = Nothing
-            da = Nothing
-            'obj.acq_grid.Columns("customer_id").Visible = False
-            acq_grid.Columns("customer_id").Visible = False
-            conn.Close()
-            conn.Dispose()
+                trans_check = True
 
-            'obj.Show()
+            Catch ex As MySqlException
+                Aerror.Text = ex.ToString()
+            Finally
 
-        Catch ex As MySqlException
+            End Try
 
-        Finally
-            ' conn.Close()
-        End Try
+        Else
+
+        End If
+
+
+
+
+
+
 
         adap = New MySqlDataAdapter(query, conn)
         ds = New DataSet()
 
-        query = "SELECT customer.customer_id, customer.firstname AS FirstName, customer.lastname AS LastName, customer.company AS Company, customer.address1,
+        query = "SELECT customer.customer_id, disposition.dis_id, customer.firstname AS FirstName, customer.lastname AS LastName, customer.company AS Company, customer.address1,
                         customer.address2, customer.city, customer.state, customer.zip, customer.licensenum, customer.phone_number,
                         manufacturers.name AS Manufacturer, models.name AS Model, caliber.name AS Caliber, gun.serialnum AS SerialNumber, 
                         disposition.transaction_date FROM gun 
-                        LEFT JOIN disposition 
+                        RIGHT JOIN disposition 
                                 INNER JOIN customer ON disposition.customer_id = customer.customer_id  
                         ON gun.gun_id = disposition.gun_id  
                         LEFT JOIN manufacturers ON gun.man_id = manufacturers.man_id 
@@ -797,14 +909,14 @@ Public Class Form1
                         LEFT JOIN type ON gun.type_id = type.type_id
                         LEFT JOIN mancountry ON gun.mancountry_id = mancountry.mancountry_id
                         LEFT JOIN caliber ON gun.cal_id = caliber.cal_id 
-                        WHERE 
+                         
                         "
         check = False
 
 
         If Not Sfname.Text = "" Then
             If Not check Then
-                query += " firstname LIKE @firstname"
+                query += " WHERE firstname LIKE @firstname"
             Else
                 query += " AND firstname LIKE @firstname"
             End If
@@ -813,7 +925,7 @@ Public Class Form1
 
         If Not Slname.Text = "" Then
             If Not check Then
-                query += " lastname LIKE @lastname"
+                query += " WHERE lastname LIKE @lastname"
             Else
                 query += " AND lastname LIKE @lastname"
             End If
@@ -822,7 +934,7 @@ Public Class Form1
 
         If Not Scname.Text = "" Then
             If Not check Then
-                query += " company LIKE @company"
+                query += " WHERE company LIKE @company"
             Else
                 query += " AND company LIKE @company"
             End If
@@ -831,7 +943,7 @@ Public Class Form1
 
         If Not Saddress1.Text = "" Then
             If Not check Then
-                query += " address1 LIKE @address1"
+                query += " WHERE address1 LIKE @address1"
             Else
                 query += " AND address1 LIKE @address1"
             End If
@@ -840,7 +952,7 @@ Public Class Form1
 
         If Not Saddress2.Text = "" Then
             If Not check Then
-                query += " address2 LIKE @address2"
+                query += " WHERE address2 LIKE @address2"
             Else
                 query += " AND address2 LIKE @address2"
             End If
@@ -849,7 +961,7 @@ Public Class Form1
 
         If Not Scity.Text = "" Then
             If Not check Then
-                query += " city LIKE @city"
+                query += " WHERE city LIKE @city"
             Else
                 query += " AND city LIKE @city"
             End If
@@ -858,7 +970,7 @@ Public Class Form1
 
         If Not Sstate.Text = "" Then
             If Not check Then
-                query += " state LIKE @state"
+                query += " WHERE state LIKE @state"
             Else
                 query += " AND state LIKE @state"
             End If
@@ -867,7 +979,7 @@ Public Class Form1
 
         If Not Szip.Text = "" Then
             If Not check Then
-                query += " zip LIKE @zip"
+                query += " WHERE zip LIKE @zip"
             Else
                 query += " AND zip LIKE @zip"
             End If
@@ -876,7 +988,7 @@ Public Class Form1
 
         If Not Slicensenum.Text = "" Then
             If Not check Then
-                query += " licensenum LIKE @licensenum"
+                query += " WHERE licensenum LIKE @licensenum"
             Else
                 query += " AND licensenum LIKE @licensenum"
             End If
@@ -885,7 +997,7 @@ Public Class Form1
 
         If Not Sphone.Text = "" Then
             If Not check Then
-                query += " phone_number LIKE @phone_number"
+                query += " WHERE phone_number LIKE @phone_number"
             Else
                 query += " AND phone_number LIKE @phone_number"
             End If
@@ -894,7 +1006,7 @@ Public Class Form1
 
         If Not Scat.Text = "" Then
             If Not check Then
-                query += " category.name LIKE @scat"
+                query += " WHERE category.name LIKE @scat"
             Else
                 query += " AND category.name LIKE @scat"
             End If
@@ -903,7 +1015,7 @@ Public Class Form1
 
         If Not Stype.Text = "" Then
             If Not check Then
-                query += " type.name LIKE @stype"
+                query += " WHERE type.name LIKE @stype"
             Else
                 query += " AND type.name LIKE @stype"
             End If
@@ -912,7 +1024,7 @@ Public Class Form1
 
         If Not Scaliber.Text = "" Then
             If Not check Then
-                query += " caliber.name LIKE @scaliber"
+                query += " WHERE caliber.name LIKE @scaliber"
             Else
                 query += " AND caliber.name LIKE @scaliber"
             End If
@@ -921,7 +1033,7 @@ Public Class Form1
 
         If Not Smanufacturer.Text = "" Then
             If Not check Then
-                query += " manufacturers.name LIKE @smanufacturer"
+                query += " WHERE manufacturers.name LIKE @smanufacturer"
             Else
                 query += " AND manufacturers.name LIKE @smanufacturer"
             End If
@@ -930,7 +1042,7 @@ Public Class Form1
 
         If Not Smodel.Text = "" Then
             If Not check Then
-                query += " models.name LIKE @smodel"
+                query += " WHERE models.name LIKE @smodel"
             Else
                 query += " AND models.name LIKE @smodel"
             End If
@@ -939,7 +1051,7 @@ Public Class Form1
 
         If Not Smancountry.Text = "" Then
             If Not check Then
-                query += " mancountry.name LIKE @smancountry"
+                query += " WHERE mancountry.name LIKE @smancountry"
             Else
                 query += " AND mancountry.name LIKE @smancountry"
             End If
@@ -948,25 +1060,16 @@ Public Class Form1
 
         If Not Syear.Text = "" Then
             If Not check Then
-                query += " gun.year LIKE @syear"
+                query += " WHERE gun.year LIKE @syear"
             Else
                 query += " AND gun.year LIKE @syear"
             End If
             check = True
         End If
 
-        If Not Spurchase_price.Text = "" Then
-            If Not check Then
-                query += " acquisition.purchase_price LIKE @spurchase_price"
-            Else
-                query += " AND acquisition.purchase_price LIKE @spurchase_price"
-            End If
-            check = True
-        End If
-
         If Not Sserialnum.Text = "" Then
             If Not check Then
-                query += " gun.serialnum LIKE @sserialnum"
+                query += " WHERE gun.serialnum LIKE @sserialnum"
             Else
                 query += " AND gun.serialnum LIKE @sserialnum"
             End If
@@ -974,10 +1077,11 @@ Public Class Form1
         End If
 
 
+        ' MsgBox(query)
 
-
-
+        '  If check Then
         adap = New MySqlDataAdapter(query, conn)
+
 
         If Not Sfname.Text = "" Then
             adap.SelectCommand.Parameters.AddWithValue("@firstname", "%" + Sfname.Text + "%")
@@ -1047,10 +1151,6 @@ Public Class Form1
             adap.SelectCommand.Parameters.AddWithValue("@syear", "%" + Syear.Text + "%")
         End If
 
-        If Not Spurchase_price.Text = "" Then
-            adap.SelectCommand.Parameters.AddWithValue("@spurchase_price", "%" + Spurchase_price.Text + "%")
-        End If
-
         If Not Sserialnum.Text = "" Then
             adap.SelectCommand.Parameters.AddWithValue("@sserialnum", "%" + Sserialnum.Text + "%")
         End If
@@ -1058,37 +1158,55 @@ Public Class Form1
 
 
 
+
+
         Try
             adap.Fill(ds)
-
-            'obj.acq_grid.DataSource = ds.Tables(0)
-            dis_grid.DataSource = ds.Tables(0)
-            ds = Nothing
-            da = Nothing
-            'obj.acq_grid.Columns("customer_id").Visible = False
-            dis_grid.Columns("customer_id").Visible = False
-            conn.Close()
-            conn.Dispose()
-
-            'obj.Show()
-
-        Catch ex As MySqlException
-
-        Finally
-            conn.Close()
+        Catch
         End Try
+
+
+        If ds.Tables(0).Rows.Count > 0 Then
+            Try
+                dis_grid.DataSource = ds.Tables(0)
+                ds = Nothing
+                da = Nothing
+                dis_grid.Columns("customer_id").Visible = False
+                dis_grid.Columns("dis_id").Visible = False
+
+
+            Catch ex As MySqlException
+
+            Finally
+                conn.Close()
+            End Try
+        ElseIf Not trans_check Then
+            MsgBox("No records found!", MsgBoxStyle.OkOnly)
+        End If
+
+
+
+
+        conn.Close()
+
+
+        '  End If
+
 
 
     End Sub
 
     Private Sub Sclear_Click(sender As Object, e As EventArgs) Handles Sclear.Click
+        acq_grid.DataSource = Nothing
+        dis_grid.DataSource = Nothing
+
         Sfname.Text = ""
         Slname.Text = ""
         Scname.Text = ""
         Saddress1.Text = ""
         Saddress2.Text = ""
         Scity.Text = ""
-        Sstate.Text = ""
+        Sstate.SelectedIndex = -1
         Szip.Text = ""
         Slicensenum.Text = ""
         Sphone.Text = ""
@@ -1099,7 +1217,7 @@ Public Class Form1
         Smodel.SelectedIndex = -1
         Smancountry.SelectedIndex = -1
         Syear.Text = ""
-        Spurchase_price.Text = ""
+        'Spurchase_price.Text = ""
         Sserialnum.Text = ""
 
         SCfname.Text = "N/A"
@@ -1120,6 +1238,7 @@ Public Class Form1
         AAcquired.Value = DateTime.Now
         Atransdate.Value = DateTime.Now
         Adeadline.Value = DateTime.Now
+        csearch_grid.DataSource = Nothing
 
         adeadline_no.Checked = True
 
@@ -1142,7 +1261,7 @@ Public Class Form1
         ACaddress1.Text = ""
         ACaddress2.Text = ""
         ACcity.Text = ""
-        ACstate.Text = ""
+        ACstate.SelectedIndex = -1
         ACzip.Text = ""
         AClicensenum.Text = ""
         ACphone.Text = ""
@@ -1172,16 +1291,29 @@ Public Class Form1
 
     Private Sub Csearchbtn_Click(sender As Object, e As EventArgs) Handles Csearchbtn.Click
         Dim query As String = "SELECT customer.customer_id, customer.firstname AS FirstName, customer.lastname AS LastName, customer.company AS Company, customer.address1,
-                                customer.address2, customer.city, customer.state, customer.zip, customer.phone_number AS phone, customer.licensenum FROM customer WHERE "
+                                customer.address2, customer.city, customer.state, customer.zip, customer.phone_number AS phone, customer.licensenum FROM customer "
+
+        Try
+            conn.Close()
+        Catch ex As Exception
+
+        End Try
+
+        Try
+            conn.Open()
+        Catch ex As MySqlException
+            MsgBox("An Error Occurred. " & ex.Number & “ – “ & ex.Message)
+        End Try
 
         Dim adap As MySqlDataAdapter = New MySqlDataAdapter(query, conn)
         Dim ds As New DataSet()
         Dim check As Boolean = False
 
+        csearch_grid.DataSource = Nothing
 
         If Not ACfname.Text = "" Then
             If Not check Then
-                query += " firstname LIKE @firstname"
+                query += " WHERE firstname LIKE @firstname"
             Else
                 query += " And firstname Like @firstname"
             End If
@@ -1190,7 +1322,7 @@ Public Class Form1
 
         If Not AClname.Text = "" Then
             If Not check Then
-                query += " lastname Like @lastname"
+                query += " WHERE lastname Like @lastname"
             Else
                 query += " And lastname Like @lastname"
             End If
@@ -1199,7 +1331,7 @@ Public Class Form1
 
         If Not ACcompany.Text = "" Then
             If Not check Then
-                query += " company Like @company"
+                query += " WHERE company Like @company"
             Else
                 query += " And company Like @company"
             End If
@@ -1208,7 +1340,7 @@ Public Class Form1
 
         If Not ACaddress1.Text = "" Then
             If Not check Then
-                query += " address1 Like @address1"
+                query += " WHERE address1 Like @address1"
             Else
                 query += " And address1 Like @address1"
             End If
@@ -1217,7 +1349,7 @@ Public Class Form1
 
         If Not ACaddress2.Text = "" Then
             If Not check Then
-                query += " address2 Like @address2"
+                query += " WHERE address2 Like @address2"
             Else
                 query += " And address2 Like @address2"
             End If
@@ -1226,7 +1358,7 @@ Public Class Form1
 
         If Not ACcity.Text = "" Then
             If Not check Then
-                query += " city Like @city"
+                query += " WHERE city Like @city"
             Else
                 query += " And city Like @city"
             End If
@@ -1235,7 +1367,7 @@ Public Class Form1
 
         If Not ACstate.Text = "" Then
             If Not check Then
-                query += " state Like @state"
+                query += " WHERE customer.state Like @state"
             Else
                 query += " And state Like @state"
             End If
@@ -1244,7 +1376,7 @@ Public Class Form1
 
         If Not ACzip.Text = "" Then
             If Not check Then
-                query += " zip Like @zip"
+                query += " WHERE zip Like @zip"
             Else
                 query += " And zip Like @zip"
             End If
@@ -1253,7 +1385,7 @@ Public Class Form1
 
         If Not AClicensenum.Text = "" Then
             If Not check Then
-                query += " licensenum Like @licensenum"
+                query += " WHERE licensenum Like @licensenum"
             Else
                 query += " And licensenum Like @licensenum"
             End If
@@ -1262,13 +1394,15 @@ Public Class Form1
 
         If Not ACphone.Text = "" Then
             If Not check Then
-                query += " phone_number Like @phone_number"
+                query += " WHERE phone_number Like @phone_number"
             Else
                 query += " And phone_number Like @phone_number"
             End If
             check = True
         End If
 
+
+        ' If check Then
         adap = New MySqlDataAdapter(query, conn)
 
         If Not ACfname.Text = "" Then
@@ -1296,7 +1430,7 @@ Public Class Form1
         End If
 
         If Not ACstate.Text = "" Then
-            adap.SelectCommand.Parameters.AddWithValue("@state", "%" + ACstate.Text + "%")
+            adap.SelectCommand.Parameters.AddWithValue("@state", ACstate.Text)
         End If
 
         If Not ACzip.Text = "" Then
@@ -1311,27 +1445,27 @@ Public Class Form1
             adap.SelectCommand.Parameters.AddWithValue("@phone_number", "%" + ACphone.Text + "%")
         End If
 
+        adap.Fill(ds)
+        If ds.Tables(0).Rows.Count > 0 Or functioninput Then
+            ' Try
 
-
-        Try
-            adap.Fill(ds)
-
-            ' obj.acq_grid.DataSource = ds.Tables(0)
             csearch_grid.DataSource = ds.Tables(0)
-            ds = Nothing
-            da = Nothing
-            ' obj.acq_grid.Columns("customer_id").Visible = False
-            csearch_grid.Columns("customer_id").Visible = False
+                ds = Nothing
+                da = Nothing
+                csearch_grid.Columns("customer_id").Visible = False
+
+
+            '   Catch ex As MySqlException
+
+            '   Finally
             conn.Close()
-            conn.Dispose()
+            '   End Try
+        Else
+            MsgBox("No records found!", MsgBoxStyle.OkOnly)
+        End If
+        '  End If
 
-            ' obj.Show()
 
-        Catch ex As MySqlException
-
-        Finally
-            conn.Close()
-        End Try
     End Sub
 
 
@@ -1359,6 +1493,7 @@ Public Class Form1
             citycb.Checked = True
             statecb.Checked = True
             zipcb.Checked = True
+            phonenumbercb.Checked = True
             licensenumcb.Checked = True
             manufacturercb.Checked = True
             modelcb.Checked = True
@@ -1374,6 +1509,7 @@ Public Class Form1
             citycb.Checked = False
             statecb.Checked = False
             zipcb.Checked = False
+            phonenumbercb.Checked = False
             licensenumcb.Checked = False
             manufacturercb.Checked = False
             modelcb.Checked = False
@@ -1384,21 +1520,45 @@ Public Class Form1
     End Sub
 
     Private Sub filterbtn_Click(sender As Object, e As EventArgs) Handles showbtn.Click
-        acq_grid.Columns("FirstName").Visible = firstnamecb.Checked
-        acq_grid.Columns("LastName").Visible = lastnamecb.Checked
-        acq_grid.Columns("Company").Visible = companycb.Checked
-        acq_grid.Columns("address1").Visible = address1cb.Checked
-        acq_grid.Columns("address2").Visible = address2cb.Checked
-        acq_grid.Columns("city").Visible = citycb.Checked
-        acq_grid.Columns("state").Visible = statecb.Checked
-        acq_grid.Columns("zip").Visible = zipcb.Checked
-        acq_grid.Columns("licensenum").Visible = licensenumcb.Checked
-        acq_grid.Columns("Manufacturer").Visible = manufacturercb.Checked
+        Try
+            acq_grid.Columns("FirstName").Visible = firstnamecb.Checked
+            acq_grid.Columns("LastName").Visible = lastnamecb.Checked
+            acq_grid.Columns("Company").Visible = companycb.Checked
+            acq_grid.Columns("address1").Visible = address1cb.Checked
+            acq_grid.Columns("address2").Visible = address2cb.Checked
+            acq_grid.Columns("city").Visible = citycb.Checked
+            acq_grid.Columns("state").Visible = statecb.Checked
+            acq_grid.Columns("zip").Visible = zipcb.Checked
+            acq_grid.Columns("licensenum").Visible = licensenumcb.Checked
+            acq_grid.Columns("phone_number").Visible = phonenumbercb.Checked
+            acq_grid.Columns("Manufacturer").Visible = manufacturercb.Checked
 
-        acq_grid.Columns("Model").Visible = modelcb.Checked
-        acq_grid.Columns("Caliber").Visible = calibercb.Checked
-        acq_grid.Columns("SerialNumber").Visible = serialnumcb.Checked
-        acq_grid.Columns("transaction_date").Visible = transdatecb.Checked
+            acq_grid.Columns("Model").Visible = modelcb.Checked
+            acq_grid.Columns("Caliber").Visible = calibercb.Checked
+            acq_grid.Columns("SerialNumber").Visible = serialnumcb.Checked
+            acq_grid.Columns("transaction_date").Visible = transdatecb.Checked
+
+
+            dis_grid.Columns("FirstName").Visible = firstnamecb.Checked
+            dis_grid.Columns("LastName").Visible = lastnamecb.Checked
+            dis_grid.Columns("Company").Visible = companycb.Checked
+            dis_grid.Columns("address1").Visible = address1cb.Checked
+            dis_grid.Columns("address2").Visible = address2cb.Checked
+            dis_grid.Columns("city").Visible = citycb.Checked
+            dis_grid.Columns("state").Visible = statecb.Checked
+            dis_grid.Columns("zip").Visible = zipcb.Checked
+            dis_grid.Columns("licensenum").Visible = licensenumcb.Checked
+            dis_grid.Columns("phone_number").Visible = phonenumbercb.Checked
+            dis_grid.Columns("Manufacturer").Visible = manufacturercb.Checked
+
+            dis_grid.Columns("Model").Visible = modelcb.Checked
+            dis_grid.Columns("Caliber").Visible = calibercb.Checked
+            dis_grid.Columns("SerialNumber").Visible = serialnumcb.Checked
+            dis_grid.Columns("transaction_date").Visible = transdatecb.Checked
+        Catch ex As Exception
+        End Try
+
+
     End Sub
 
     Private Sub Dsearchbtn_Click(sender As Object, e As EventArgs)
@@ -1415,6 +1575,17 @@ Public Class Form1
                                 LEFT JOIN type ON gun.type_id = type.type_id
                                 LEFT JOIN mancountry ON gun.mancountry_id = mancountry.mancountry_id
                                 LEFT JOIN caliber ON gun.cal_id = caliber.cal_id WHERE "
+        Try
+            conn.Close()
+        Catch ex As Exception
+
+        End Try
+
+        Try
+            conn.Open()
+        Catch ex As MySqlException
+            MsgBox("An Error Occurred. " & ex.Number & “ – “ & ex.Message)
+        End Try
 
         Dim adap As MySqlDataAdapter = New MySqlDataAdapter(query, conn)
         Dim ds As New DataSet()
@@ -1574,14 +1745,14 @@ Public Class Form1
             check = True
         End If
 
-        If Not Dpurchase_price.Text = "" Then
-            If Not check Then
-                query += " acquisition.purchase_price LIKE @spurchase_price"
-            Else
-                query += " AND acquisition.purchase_price LIKE @spurchase_price"
-            End If
-            check = True
-        End If
+        'If Not Dpurchase_price.Text = "" Then
+        '    If Not check Then
+        '        query += " acquisition.purchase_price LIKE @spurchase_price"
+        '    Else
+        '        query += " AND acquisition.purchase_price LIKE @spurchase_price"
+        '    End If
+        '    check = True
+        'End If
 
         If Not Dserialnum.Text = "" Then
             If Not check Then
@@ -1666,9 +1837,9 @@ Public Class Form1
             adap.SelectCommand.Parameters.AddWithValue("@syear", "%" + Dyear.Text + "%")
         End If
 
-        If Not Dpurchase_price.Text = "" Then
-            adap.SelectCommand.Parameters.AddWithValue("@spurchase_price", "%" + Dpurchase_price.Text + "%")
-        End If
+        'If Not Dpurchase_price.Text = "" Then
+        '    adap.SelectCommand.Parameters.AddWithValue("@spurchase_price", "%" + Dpurchase_price.Text + "%")
+        'End If
 
         If Not Dserialnum.Text = "" Then
             adap.SelectCommand.Parameters.AddWithValue("@sserialnum", "%" + Dserialnum.Text + "%")
@@ -1683,8 +1854,6 @@ Public Class Form1
             ds = Nothing
             da = Nothing
             dsearch_grid.Columns("customer_id").Visible = False
-            conn.Close()
-            conn.Dispose()
 
         Catch ex As MySqlException
 
@@ -1713,9 +1882,14 @@ Public Class Form1
     Private Sub SelectCustomerAcqFunction()
         Dim i As Integer
 
-        i = csearch_grid.CurrentRow.Index
+        Try
+            i = csearch_grid.CurrentRow.Index
+            Dim cid As String = csearch_grid.Item(0, i).Value
+        Catch ex As Exception
+            ' MsgBox(ex.Message)
+        End Try
 
-        Dim cid As String = csearch_grid.Item(0, i).Value
+
 
 
         SCcustomer_id.Text = csearch_grid.Item(0, i).Value
@@ -1796,7 +1970,12 @@ Public Class Form1
     Private Sub EditCustomerFunction()
         Dim obj As New customeredit
 
-        Dim i As Integer = csearch_grid.CurrentRow.Index
+        Dim i As Integer
+
+        Try
+            i = csearch_grid.CurrentRow.Index
+        Catch
+        End Try
 
 
 
@@ -1901,49 +2080,64 @@ Public Class Form1
         End If
     End Sub
 
-    Private Sub Amanufacturers_TextChanged(sender As Object, e As EventArgs) Handles Amanufacturers.TextChanged
-        Dim query As String = "INSERT INTO manufacturers (man_id, name) VALUES (NULL, @name)"
-        Dim cmd = New MySqlCommand(query, conn)
-
-        ' check to make sure new manufacturer isn't in the db
-
-
-        'cmd.Parameters.AddWithValue("@name", Amanufacturers.Text)
-        'cmd.ExecuteNonQuery()
-
-
-
-    End Sub
 
     Private Sub Dsearchbtn_Click_1(sender As Object, e As EventArgs) Handles Dsearchbtn.Click
         'select acquisitions of guns that haven't had disposition
+
+        'Dim query As String = "SELECT customer.customer_id, gun.gun_id, customer.firstname AS FirstName, customer.lastname AS LastName, customer.company AS Company, customer.address1,
+        '                        customer.address2, customer.city, customer.state, customer.zip, customer.licensenum, customer.phone_number,
+        '                        manufacturers.name AS Manufacturer, models.name AS Model, caliber.name AS Caliber, gun.serialnum AS SerialNumber, 
+        '                        acquisition.transaction_date FROM gun 
+        '                        LEFT JOIN acquisition 
+        '                                INNER JOIN customer ON acquisition.customer_id = customer.customer_id  
+        '                        ON gun.gun_id = acquisition.gun_id  
+        '                        LEFT JOIN disposition ON gun.gun_id = disposition.gun_id 
+        '                        LEFT JOIN manufacturers ON gun.man_id = manufacturers.man_id 
+        '                        LEFT JOIN models ON gun.model_id = models.model_id 
+        '                        LEFT JOIN category ON gun.cat_id = category.cat_id
+        '                        LEFT JOIN type ON gun.type_id = type.type_id
+        '                        LEFT JOIN mancountry ON gun.mancountry_id = mancountry.mancountry_id
+        '                        LEFT JOIN caliber ON gun.cal_id = caliber.cal_id 
+        '                        WHERE disposition.gun_id IS NULL 
+        '                        AND customer.customer_id IS NOT NULL
+        '                        "
 
         Dim query As String = "SELECT customer.customer_id, gun.gun_id, customer.firstname AS FirstName, customer.lastname AS LastName, customer.company AS Company, customer.address1,
                                 customer.address2, customer.city, customer.state, customer.zip, customer.licensenum, customer.phone_number,
                                 manufacturers.name AS Manufacturer, models.name AS Model, caliber.name AS Caliber, gun.serialnum AS SerialNumber, 
                                 acquisition.transaction_date FROM gun 
-                                LEFT JOIN acquisition 
+                                RIGHT JOIN acquisition 
                                         INNER JOIN customer ON acquisition.customer_id = customer.customer_id  
                                 ON gun.gun_id = acquisition.gun_id  
-                                LEFT JOIN disposition ON gun.gun_id = disposition.gun_id 
                                 LEFT JOIN manufacturers ON gun.man_id = manufacturers.man_id 
                                 LEFT JOIN models ON gun.model_id = models.model_id 
                                 LEFT JOIN category ON gun.cat_id = category.cat_id
                                 LEFT JOIN type ON gun.type_id = type.type_id
                                 LEFT JOIN mancountry ON gun.mancountry_id = mancountry.mancountry_id
                                 LEFT JOIN caliber ON gun.cal_id = caliber.cal_id 
-                                WHERE disposition.gun_id IS NULL 
+                                 
                                 "
+        Try
+            conn.Close()
+        Catch ex As Exception
 
+        End Try
+
+        Try
+            conn.Open()
+        Catch ex As MySqlException
+            MsgBox("An Error Occurred. " & ex.Number & “ – “ & ex.Message)
+        End Try
 
         Dim adap As MySqlDataAdapter = New MySqlDataAdapter(query, conn)
         Dim ds As New DataSet()
-        Dim check As Boolean = True
+        Dim check As Boolean = False
 
+        dsearch_grid.DataSource = Nothing
 
         If Not Dfname.Text = "" Then
             If Not check Then
-                query += " firstname LIKE @firstname"
+                query += " WHERE firstname LIKE @firstname"
             Else
                 query += " AND firstname LIKE @firstname"
             End If
@@ -1952,7 +2146,7 @@ Public Class Form1
 
         If Not Dlname.Text = "" Then
             If Not check Then
-                query += " lastname LIKE @lastname"
+                query += " WHERE lastname LIKE @lastname"
             Else
                 query += " AND lastname LIKE @lastname"
             End If
@@ -1961,7 +2155,7 @@ Public Class Form1
 
         If Not Dcompany.Text = "" Then
             If Not check Then
-                query += " company LIKE @company"
+                query += " WHERE company LIKE @company"
             Else
                 query += " AND company LIKE @company"
             End If
@@ -1970,7 +2164,7 @@ Public Class Form1
 
         If Not Daddress1.Text = "" Then
             If Not check Then
-                query += " address1 LIKE @address1"
+                query += " WHERE address1 LIKE @address1"
             Else
                 query += " AND address1 LIKE @address1"
             End If
@@ -1979,7 +2173,7 @@ Public Class Form1
 
         If Not Daddress2.Text = "" Then
             If Not check Then
-                query += " address2 LIKE @address2"
+                query += " WHERE address2 LIKE @address2"
             Else
                 query += " AND address2 LIKE @address2"
             End If
@@ -1988,7 +2182,7 @@ Public Class Form1
 
         If Not Dcity.Text = "" Then
             If Not check Then
-                query += " city LIKE @city"
+                query += " WHERE city LIKE @city"
             Else
                 query += " AND city LIKE @city"
             End If
@@ -1997,7 +2191,7 @@ Public Class Form1
 
         If Not Dstate.Text = "" Then
             If Not check Then
-                query += " state LIKE @state"
+                query += " WHERE state LIKE @state"
             Else
                 query += " AND state LIKE @state"
             End If
@@ -2006,7 +2200,7 @@ Public Class Form1
 
         If Not Dzip.Text = "" Then
             If Not check Then
-                query += " zip LIKE @zip"
+                query += " WHERE zip LIKE @zip"
             Else
                 query += " AND zip LIKE @zip"
             End If
@@ -2015,7 +2209,7 @@ Public Class Form1
 
         If Not Dlicensenum.Text = "" Then
             If Not check Then
-                query += " licensenum LIKE @licensenum"
+                query += " WHERE licensenum LIKE @licensenum"
             Else
                 query += " AND licensenum LIKE @licensenum"
             End If
@@ -2024,7 +2218,7 @@ Public Class Form1
 
         If Not Dphonenum.Text = "" Then
             If Not check Then
-                query += " phone_number LIKE @phone_number"
+                query += " WHERE phone_number LIKE @phone_number"
             Else
                 query += " AND phone_number LIKE @phone_number"
             End If
@@ -2033,7 +2227,7 @@ Public Class Form1
 
         If Not Dcategory.Text = "" Then
             If Not check Then
-                query += " category.name LIKE @scat"
+                query += " WHERE category.name LIKE @scat"
             Else
                 query += " AND category.name LIKE @scat"
             End If
@@ -2042,7 +2236,7 @@ Public Class Form1
 
         If Not Dtype.Text = "" Then
             If Not check Then
-                query += " type.name LIKE @stype"
+                query += " WHERE type.name LIKE @stype"
             Else
                 query += " AND type.name LIKE @stype"
             End If
@@ -2051,7 +2245,7 @@ Public Class Form1
 
         If Not Dcaliber.Text = "" Then
             If Not check Then
-                query += " caliber.name LIKE @scaliber"
+                query += " WHERE caliber.name LIKE @scaliber"
             Else
                 query += " AND caliber.name LIKE @scaliber"
             End If
@@ -2060,7 +2254,7 @@ Public Class Form1
 
         If Not Dmanufacturer.Text = "" Then
             If Not check Then
-                query += " manufacturers.name LIKE @smanufacturer"
+                query += " WHERE manufacturers.name LIKE @smanufacturer"
             Else
                 query += " AND manufacturers.name LIKE @smanufacturer"
             End If
@@ -2069,7 +2263,7 @@ Public Class Form1
 
         If Not Dmodel.Text = "" Then
             If Not check Then
-                query += " models.name LIKE @smodel"
+                query += " WHERE models.name LIKE @smodel"
             Else
                 query += " AND models.name LIKE @smodel"
             End If
@@ -2078,7 +2272,7 @@ Public Class Form1
 
         If Not Dmancountry.Text = "" Then
             If Not check Then
-                query += " mancountry.name LIKE @smancountry"
+                query += " WHERE mancountry.name LIKE @smancountry"
             Else
                 query += " AND mancountry.name LIKE @smancountry"
             End If
@@ -2087,32 +2281,30 @@ Public Class Form1
 
         If Not Dyear.Text = "" Then
             If Not check Then
-                query += " gun.year LIKE @syear"
+                query += " WHERE gun.year LIKE @syear"
             Else
                 query += " AND gun.year LIKE @syear"
             End If
             check = True
         End If
 
-        If Not Dpurchase_price.Text = "" Then
-            If Not check Then
-                query += " acquisition.purchase_price LIKE @spurchase_price"
-            Else
-                query += " AND acquisition.purchase_price LIKE @spurchase_price"
-            End If
-            check = True
-        End If
+        'If Not Dpurchase_price.Text = "" Then
+        '    If Not check Then
+        '        query += " WHERE acquisition.purchase_price LIKE @spurchase_price"
+        '    Else
+        '        query += " AND acquisition.purchase_price LIKE @spurchase_price"
+        '    End If
+        '    check = True
+        'End If
 
         If Not Dserialnum.Text = "" Then
             If Not check Then
-                query += " gun.serialnum LIKE @sserialnum"
+                query += " WHERE gun.serialnum LIKE @sserialnum"
             Else
                 query += " AND gun.serialnum LIKE @sserialnum"
             End If
             check = True
         End If
-
-
 
 
 
@@ -2186,34 +2378,40 @@ Public Class Form1
             adap.SelectCommand.Parameters.AddWithValue("@syear", "%" + Dyear.Text + "%")
         End If
 
-        If Not Dpurchase_price.Text = "" Then
-            adap.SelectCommand.Parameters.AddWithValue("@spurchase_price", "%" + Dpurchase_price.Text + "%")
-        End If
+        'If Not Dpurchase_price.Text = "" Then
+        '    adap.SelectCommand.Parameters.AddWithValue("@spurchase_price", "%" + Dpurchase_price.Text + "%")
+        'End If
 
         If Not Dserialnum.Text = "" Then
             adap.SelectCommand.Parameters.AddWithValue("@sserialnum", "%" + Dserialnum.Text + "%")
         End If
 
 
-        Try
-            adap.Fill(ds)
+        adap.Fill(ds)
 
-            dsearch_grid.DataSource = ds.Tables(0)
-            ds = Nothing
-            da = Nothing
-            dsearch_grid.Columns("customer_id").Visible = False
-            dsearch_grid.Columns("gun_id").Visible = False
-            conn.Close()
-            conn.Dispose()
+        If ds.Tables(0).Rows.Count > 0 Then
+            Try
 
-        Catch ex As MySqlException
+                dsearch_grid.DataSource = ds.Tables(0)
+                ds = Nothing
+                da = Nothing
+                dsearch_grid.Columns("customer_id").Visible = False
+                dsearch_grid.Columns("gun_id").Visible = False
 
-        Finally
-            conn.Close()
-        End Try
+            Catch ex As MySqlException
+
+            Finally
+                conn.Close()
+            End Try
+        Else
+            MsgBox("No records found!", MsgBoxStyle.OkOnly)
+        End If
+
     End Sub
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Dclearbtn.Click
+        dsearch_grid.DataSource = Nothing
+
         Dfname.Text = ""
         Dlname.Text = ""
         Dcompany.Text = ""
@@ -2231,7 +2429,7 @@ Public Class Form1
         Dmanufacturer.SelectedIndex = -1
         Dmodel.SelectedIndex = -1
         Dyear.Text = ""
-        Dpurchase_price.Text = ""
+        'Dpurchase_price.Text = ""
         Dserialnum.Text = ""
 
         DSCfname.Text = "N/A"
@@ -2330,8 +2528,18 @@ Public Class Form1
 
     Private Sub Dsubmit_Click(sender As Object, e As EventArgs) Handles Dsubmit.Click
         ' first check to make sure everything is entered
+        'TODO make sure everything is filled in before pressing submit
+        Try
+            conn.Close()
+        Catch ex As Exception
 
-        conn.Open()
+        End Try
+
+        Try
+            conn.Open()
+        Catch ex As MySqlException
+            MsgBox("An Error Occurred. " & ex.Number & “ – “ & ex.Message)
+        End Try
 
         Dim query As String = "INSERT INTO disposition (dis_id, gun_id, customer_id, dis_date, transaction_date, date_entered"
 
@@ -2348,15 +2556,21 @@ Public Class Form1
         query += ")"
         Dim cmd As New MySqlCommand(query, conn)
 
-        derror.Text = query
 
         cmd.Parameters.AddWithValue("@gun_id", gunid.Text)
         cmd.Parameters.AddWithValue("@customer_id", SCcustomer_id.Text)
         cmd.Parameters.AddWithValue("@transaction_date", dtransdate.Value)
+        Try
+            cmd.ExecuteNonQuery()
 
-        cmd.ExecuteNonQuery()
+            derror.Text = "Submitted"
+        Catch ex As MySqlException
+            derror.Text = "An Error Occurred. " & ex.Number & “ – “ & ex.Message
+            Return
+        Finally
+            conn.Close()
+        End Try
 
-        derror.Text = "submitted"
     End Sub
 
     Private Sub changecustomerbtn_Click(sender As Object, e As EventArgs) Handles changecustomerbtn.Click
@@ -2400,5 +2614,363 @@ Public Class Form1
 
         cbfill("SELECT name FROM manufacturers", "manufacturers", "name", obj.Amanufacturers)
         obj.Show()
+    End Sub
+
+    Private Sub search_contact_history_Click(sender As Object, e As EventArgs) Handles search_contact_history.Click
+        Dim i As Integer
+        Dim obj As New ContactHistory
+
+        Try
+            i = acq_grid.CurrentRow.Index
+        Catch
+        End Try
+
+        Dim cid As String = acq_grid.Item(0, i).Value
+        Dim firstname As String = acq_grid.Item(2, i).Value
+        Dim lastname As String = acq_grid.Item(3, i).Value
+
+        obj.Text = firstname + " " + lastname + "'s Contact History"
+
+
+        Dim query As String = "SELECT * FROM customer_history WHERE customer_id = " + cid
+        Dim adap As New MySqlDataAdapter(query, conn)
+        Dim ds As New DataSet()
+
+        Try
+            adap.Fill(ds)
+
+            obj.search_contact_history.DataSource = ds.Tables(0)
+            ds = Nothing
+            da = Nothing
+
+        Catch ex As MySqlException
+        Finally
+        End Try
+
+        obj.Show()
+
+        Try
+            conn.Close()
+        Catch ex As Exception
+
+        End Try
+    End Sub
+
+    Private Sub acq_grid_CellMouseDown(sender As Object, e As DataGridViewCellMouseEventArgs) Handles acq_grid.CellMouseDown
+        If (e.Button = MouseButtons.Right) Then
+            acq_SearchStrip.Show(MousePosition.X, MousePosition.Y)
+        End If
+    End Sub
+
+    Private Sub dis_grid_CellMouseDown(sender As Object, e As DataGridViewCellMouseEventArgs) Handles dis_grid.CellMouseDown
+        If (e.Button = MouseButtons.Right) Then
+            dis_SearchStrip.Show(MousePosition.X, MousePosition.Y)
+        End If
+    End Sub
+
+    Private Sub search_prev_trans_Click(sender As Object, e As EventArgs) Handles search_prev_trans.Click
+        'TODO add hover text
+        Dim i As Integer
+
+        Try
+            i = acq_grid.CurrentRow.Index
+        Catch
+        End Try
+
+        Dim cid As String = acq_grid.Item(0, i).Value
+        Dim firstname As String = acq_grid.Item(2, i).Value
+        Dim lastname As String = acq_grid.Item(3, i).Value
+
+        Dim query As String = "SELECT customer.firstname, customer.lastname,
+                                manufacturers.name AS Manufacturer, models.name AS Model, caliber.name AS Caliber, gun.serialnum AS SerialNumber, 
+                                acquisition.transaction_date FROM gun 
+                                LEFT JOIN acquisition ON gun.gun_id = acquisition.gun_id  
+                                LEFT JOIN disposition ON gun.gun_id = disposition.gun_id 
+                                LEFT JOIN manufacturers ON gun.man_id = manufacturers.man_id 
+                                LEFT JOIN models ON gun.model_id = models.model_id 
+                                LEFT JOIN category ON gun.cat_id = category.cat_id
+                                LEFT JOIN type ON gun.type_id = type.type_id
+                                LEFT JOIN mancountry ON gun.mancountry_id = mancountry.mancountry_id
+                                LEFT JOIN caliber ON gun.cal_id = caliber.cal_id 
+                                LEFT JOIN customer ON acquisition.customer_id = customer.customer_id
+                                WHERE acquisition.customer_id = 
+                                " + cid
+        Dim adap As New MySqlDataAdapter(query, conn)
+        Dim ds As New DataSet()
+
+        Try
+            adap.Fill(ds)
+
+            acq_grid.DataSource = ds.Tables(0)
+            ds = Nothing
+            da = Nothing
+
+        Catch ex As MySqlException
+        Finally
+        End Try
+
+        query = "SELECT customer.firstname, customer.lastname,
+                    manufacturers.name AS Manufacturer, models.name AS Model, caliber.name AS Caliber, gun.serialnum AS SerialNumber, 
+                    disposition.transaction_date FROM gun  
+                    LEFT JOIN disposition ON gun.gun_id = disposition.gun_id 
+                    LEFT JOIN manufacturers ON gun.man_id = manufacturers.man_id 
+                    LEFT JOIN models ON gun.model_id = models.model_id 
+                    LEFT JOIN category ON gun.cat_id = category.cat_id
+                    LEFT JOIN type ON gun.type_id = type.type_id
+                    LEFT JOIN mancountry ON gun.mancountry_id = mancountry.mancountry_id
+                    LEFT JOIN caliber ON gun.cal_id = caliber.cal_id 
+                    LEFT JOIN customer ON disposition.customer_id = customer.customer_id
+                    WHERE disposition.customer_id = 
+                    " + cid
+        adap = New MySqlDataAdapter(query, conn)
+        ds = New DataSet()
+
+        Try
+            adap.Fill(ds)
+
+            dis_grid.DataSource = ds.Tables(0)
+            ds = Nothing
+            da = Nothing
+
+        Catch ex As MySqlException
+        Finally
+        End Try
+
+        Try
+            conn.Close()
+        Catch ex As Exception
+
+        End Try
+    End Sub
+
+
+    Private Sub search_contact_history_MouseHover(sender As Object, e As EventArgs) Handles search_contact_history.MouseHover
+        'Dim tt As ToolTip = New ToolTip()
+
+        'tt.SetToolTip(acq_SearchStrip, "this is the message")
+    End Sub
+
+    Private Sub dis_trans_log_Click(sender As Object, e As EventArgs) Handles dis_trans_log.Click
+        Dim i As Integer
+
+        Try
+            i = dis_grid.CurrentRow.Index
+        Catch
+        End Try
+
+        Dim cid As String = dis_grid.Item(1, i).Value
+
+        Dim query As String = "SELECT * FROM disposition_history WHERE dis_id = " + cid
+        Dim adap As New MySqlDataAdapter(query, conn)
+        Dim ds As New DataSet()
+
+        Try
+            adap.Fill(ds)
+
+            dis_grid.DataSource = ds.Tables(0)
+            ds = Nothing
+            da = Nothing
+
+        Catch ex As MySqlException
+        Finally
+        End Try
+
+
+        Try
+            conn.Close()
+        Catch ex As Exception
+
+        End Try
+    End Sub
+
+    Private Sub search_trans_log_Click(sender As Object, e As EventArgs) Handles search_trans_log.Click
+        Dim i As Integer
+
+        Try
+            i = acq_grid.CurrentRow.Index
+        Catch
+        End Try
+
+        Dim cid As String = acq_grid.Item(1, i).Value
+
+
+        Dim query As String = "SELECT * FROM acquisition_history WHERE acq_id = " + cid
+        Dim adap As New MySqlDataAdapter(query, conn)
+        Dim ds As New DataSet()
+
+        Try
+            adap.Fill(ds)
+
+            acq_grid.DataSource = ds.Tables(0)
+            ds = Nothing
+            da = Nothing
+
+        Catch ex As MySqlException
+        Finally
+        End Try
+
+
+        Try
+            conn.Close()
+        Catch ex As Exception
+
+        End Try
+    End Sub
+
+    Private Sub dis_prev_trans_Click(sender As Object, e As EventArgs) Handles dis_prev_trans.Click
+        'TODO add hover text
+        Dim i As Integer
+
+        Try
+            i = dis_grid.CurrentRow.Index
+        Catch
+        End Try
+
+        Dim cid As String = dis_grid.Item(0, i).Value
+        Dim firstname As String = dis_grid.Item(2, i).Value
+        Dim lastname As String = dis_grid.Item(3, i).Value
+
+        Dim query As String = "SELECT customer.firstname, customer.lastname,
+                                manufacturers.name AS Manufacturer, models.name AS Model, caliber.name AS Caliber, gun.serialnum AS SerialNumber, 
+                                acquisition.transaction_date FROM gun 
+                                LEFT JOIN acquisition ON gun.gun_id = acquisition.gun_id  
+                                LEFT JOIN disposition ON gun.gun_id = disposition.gun_id 
+                                LEFT JOIN manufacturers ON gun.man_id = manufacturers.man_id 
+                                LEFT JOIN models ON gun.model_id = models.model_id 
+                                LEFT JOIN category ON gun.cat_id = category.cat_id
+                                LEFT JOIN type ON gun.type_id = type.type_id
+                                LEFT JOIN mancountry ON gun.mancountry_id = mancountry.mancountry_id
+                                LEFT JOIN caliber ON gun.cal_id = caliber.cal_id 
+                                LEFT JOIN customer ON acquisition.customer_id = customer.customer_id
+                                WHERE acquisition.customer_id = 
+                                " + cid
+        Dim adap As New MySqlDataAdapter(query, conn)
+        Dim ds As New DataSet()
+
+        Try
+            adap.Fill(ds)
+
+            acq_grid.DataSource = ds.Tables(0)
+            ds = Nothing
+            da = Nothing
+
+        Catch ex As MySqlException
+        Finally
+        End Try
+
+        query = "SELECT customer.firstname, customer.lastname,
+                    manufacturers.name AS Manufacturer, models.name AS Model, caliber.name AS Caliber, gun.serialnum AS SerialNumber, 
+                    disposition.transaction_date FROM gun  
+                    LEFT JOIN disposition ON gun.gun_id = disposition.gun_id 
+                    LEFT JOIN manufacturers ON gun.man_id = manufacturers.man_id 
+                    LEFT JOIN models ON gun.model_id = models.model_id 
+                    LEFT JOIN category ON gun.cat_id = category.cat_id
+                    LEFT JOIN type ON gun.type_id = type.type_id
+                    LEFT JOIN mancountry ON gun.mancountry_id = mancountry.mancountry_id
+                    LEFT JOIN caliber ON gun.cal_id = caliber.cal_id 
+                    LEFT JOIN customer ON disposition.customer_id = customer.customer_id
+                    WHERE disposition.customer_id = 
+                    " + cid
+        adap = New MySqlDataAdapter(query, conn)
+        ds = New DataSet()
+
+        Try
+            adap.Fill(ds)
+
+            dis_grid.DataSource = ds.Tables(0)
+            ds = Nothing
+            da = Nothing
+
+        Catch ex As MySqlException
+        Finally
+        End Try
+
+        Try
+            conn.Close()
+        Catch ex As Exception
+
+        End Try
+    End Sub
+
+    Private Sub dis_contact_history_Click(sender As Object, e As EventArgs) Handles dis_contact_history.Click
+        Dim i As Integer
+        Dim obj As New ContactHistory
+
+        Try
+            i = dis_grid.CurrentRow.Index
+        Catch
+        End Try
+
+        Dim cid As String = dis_grid.Item(0, i).Value
+        Dim firstname As String = dis_grid.Item(2, i).Value
+        Dim lastname As String = dis_grid.Item(3, i).Value
+
+        obj.Text = firstname + " " + lastname + "'s Contact History"
+
+
+        Dim query As String = "SELECT * FROM customer_history WHERE customer_id = " + cid
+        Dim adap As New MySqlDataAdapter(query, conn)
+        Dim ds As New DataSet()
+
+        Try
+            adap.Fill(ds)
+
+            obj.search_contact_history.DataSource = ds.Tables(0)
+            ds = Nothing
+            da = Nothing
+
+        Catch ex As MySqlException
+        Finally
+        End Try
+
+        obj.Show()
+
+        Try
+            conn.Close()
+        Catch ex As Exception
+
+        End Try
+    End Sub
+
+    Private Sub acq_contact_history_Click(sender As Object, e As EventArgs) Handles acq_contact_history.Click
+        'TODO functionize this
+
+        Dim i As Integer
+        Dim obj As New ContactHistory
+
+        Try
+            i = csearch_grid.CurrentRow.Index
+        Catch
+        End Try
+
+        Dim cid As String = csearch_grid.Item(0, i).Value
+        Dim firstname As String = csearch_grid.Item(2, i).Value
+        Dim lastname As String = csearch_grid.Item(3, i).Value
+
+        obj.Text = firstname + " " + lastname + "'s Contact History"
+
+
+        Dim query As String = "SELECT * FROM customer_history WHERE customer_id = " + cid
+        Dim adap As New MySqlDataAdapter(query, conn)
+        Dim ds As New DataSet()
+
+        Try
+            adap.Fill(ds)
+
+            obj.search_contact_history.DataSource = ds.Tables(0)
+            ds = Nothing
+            da = Nothing
+
+        Catch ex As MySqlException
+        Finally
+        End Try
+
+        obj.Show()
+
+        Try
+            conn.Close()
+        Catch ex As Exception
+
+        End Try
     End Sub
 End Class

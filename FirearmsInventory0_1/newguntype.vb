@@ -2,8 +2,7 @@
 
 Public Class newguntype
     Public conn As New MySqlConnection
-    Public constr As String = "database=firearms;data source=76.74.170.191;" _
-        & "user id=vb;password=zsxdcf"
+    Public constr = Form1.constr
 
     Private Sub newguntyppeform_Load(sender As System.Object, e As System.EventArgs) Handles MyBase.Load
         Try
@@ -16,7 +15,10 @@ Public Class newguntype
     End Sub
 
     Private Sub guntypesubmit_Click(sender As Object, e As EventArgs) Handles guntypesubmit.Click
-        'TODO pop up to make sure user wants to add gun type
+        ''TODO have dropdown select the new type added
+
+
+
         Dim query As String = "INSERT INTO "
         Dim changes As String = "Add:" + vbCrLf + guntextbox.Text
 
@@ -34,6 +36,18 @@ Public Class newguntype
 
         End If
 
+        Try
+            conn.Close()
+        Catch ex As Exception
+        End Try
+
+        Try
+            conn = New MySqlConnection
+            conn.ConnectionString = constr
+            conn.Open()
+        Catch ex As MySqlException
+            MsgBox(ex.Message)
+        End Try
 
         Dim cmd As New MySqlCommand(query, conn)
 
@@ -59,8 +73,30 @@ Public Class newguntype
             Try
                 cmd.ExecuteNonQuery()
 
+
+
+                If gunlabel.Text = "Manufacturer:" Then
+                    Form1.cbfill("SELECT name FROM manufacturers", "manufacturers", "name", Form1.Amanufacturers)
+                    Form1.Amanufacturers.SelectedValue = guntextbox.Text
+                ElseIf gunlabel.Text = "Manufacturer Country:" Then
+                    Form1.cbfill("SELECT name FROM mancountry", "mancountry", "name", Form1.Amancountry)
+                    Form1.Amancountry.SelectedValue = guntextbox.Text
+                ElseIf gunlabel.Text = "Caliber:" Then
+                    Form1.cbfill("SELECT name FROM caliber", "caliber", "name", Form1.Acaliber)
+                    Form1.Acaliber.SelectedValue = guntextbox.Text
+                ElseIf gunlabel.Text = "Model:" Then
+                    Form1.cbfill("SELECT name FROM manufacturers", "mancountry", "name", Form1.Amanufacturers)
+                    Form1.Amanufacturers.SelectedValue = Amanufacturers.SelectedValue
+
+                    Form1.cbfill("SELECT name FROM models WHERE man_id = '" + Amanufacturers.SelectedValue + "';", "models", "name", Form1.Amodel)
+                    Form1.Amodel.SelectedValue = guntextbox.Text
+
+                End If
+
+
+
                 Me.Close()
-                MsgBox("submitted")
+                MsgBox("Submitted")
 
             Catch ex As MySqlException
                 MsgBox(ex.ToString())

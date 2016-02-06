@@ -23,6 +23,7 @@ Partial Class Form1
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Form1))
         Me.scustomer_group = New System.Windows.Forms.GroupBox()
         Me.Label48 = New System.Windows.Forms.Label()
         Me.ACphone = New System.Windows.Forms.TextBox()
@@ -109,7 +110,6 @@ Partial Class Form1
         Me.Label51 = New System.Windows.Forms.Label()
         Me.Dsearchbtn = New System.Windows.Forms.Button()
         Me.Dserialnum = New System.Windows.Forms.TextBox()
-        Me.Dpurchase_price = New System.Windows.Forms.TextBox()
         Me.Dzip = New System.Windows.Forms.TextBox()
         Me.Dyear = New System.Windows.Forms.TextBox()
         Me.Dcity = New System.Windows.Forms.TextBox()
@@ -125,7 +125,6 @@ Partial Class Form1
         Me.Dstate = New System.Windows.Forms.ComboBox()
         Me.Label55 = New System.Windows.Forms.Label()
         Me.Label56 = New System.Windows.Forms.Label()
-        Me.Label57 = New System.Windows.Forms.Label()
         Me.Label58 = New System.Windows.Forms.Label()
         Me.Dmancountry = New System.Windows.Forms.ComboBox()
         Me.Label59 = New System.Windows.Forms.Label()
@@ -146,6 +145,10 @@ Partial Class Form1
         Me.TabPage1 = New System.Windows.Forms.TabPage()
         Me.csearch_grid = New System.Windows.Forms.DataGridView()
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
+        Me.newmodel = New System.Windows.Forms.Button()
+        Me.newcaliber = New System.Windows.Forms.Button()
+        Me.newmancountry = New System.Windows.Forms.Button()
+        Me.newman = New System.Windows.Forms.Button()
         Me.adeadline_no = New System.Windows.Forms.RadioButton()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.adeadline_yes = New System.Windows.Forms.RadioButton()
@@ -178,6 +181,7 @@ Partial Class Form1
         Me.Aerror = New System.Windows.Forms.TextBox()
         Me.Asubmit = New System.Windows.Forms.Button()
         Me.TabPage4 = New System.Windows.Forms.TabPage()
+        Me.phonenumbercb = New System.Windows.Forms.CheckBox()
         Me.showbtn = New System.Windows.Forms.Button()
         Me.allcb = New System.Windows.Forms.CheckBox()
         Me.transdatecb = New System.Windows.Forms.CheckBox()
@@ -205,7 +209,6 @@ Partial Class Form1
         Me.Label30 = New System.Windows.Forms.Label()
         Me.Ssearch = New System.Windows.Forms.Button()
         Me.Sserialnum = New System.Windows.Forms.TextBox()
-        Me.Spurchase_price = New System.Windows.Forms.TextBox()
         Me.Szip = New System.Windows.Forms.TextBox()
         Me.Syear = New System.Windows.Forms.TextBox()
         Me.Scity = New System.Windows.Forms.TextBox()
@@ -221,7 +224,6 @@ Partial Class Form1
         Me.Sstate = New System.Windows.Forms.ComboBox()
         Me.Label33 = New System.Windows.Forms.Label()
         Me.Label12 = New System.Windows.Forms.Label()
-        Me.Label40 = New System.Windows.Forms.Label()
         Me.Label34 = New System.Windows.Forms.Label()
         Me.Smancountry = New System.Windows.Forms.ComboBox()
         Me.Label39 = New System.Windows.Forms.Label()
@@ -240,14 +242,19 @@ Partial Class Form1
         Me.Scaliber = New System.Windows.Forms.ComboBox()
         Me.TabControl1 = New System.Windows.Forms.TabControl()
         Me.AcqStrip = New System.Windows.Forms.ContextMenuStrip(Me.components)
+        Me.acq_contact_history = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripMenuItem2 = New System.Windows.Forms.ToolStripMenuItem()
         Me.DispStrip = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.ToolStripMenuItem3 = New System.Windows.Forms.ToolStripMenuItem()
-        Me.newman = New System.Windows.Forms.Button()
-        Me.newmancountry = New System.Windows.Forms.Button()
-        Me.newcaliber = New System.Windows.Forms.Button()
-        Me.newmodel = New System.Windows.Forms.Button()
+        Me.acq_SearchStrip = New System.Windows.Forms.ContextMenuStrip(Me.components)
+        Me.search_contact_history = New System.Windows.Forms.ToolStripMenuItem()
+        Me.search_prev_trans = New System.Windows.Forms.ToolStripMenuItem()
+        Me.search_trans_log = New System.Windows.Forms.ToolStripMenuItem()
+        Me.dis_SearchStrip = New System.Windows.Forms.ContextMenuStrip(Me.components)
+        Me.dis_contact_history = New System.Windows.Forms.ToolStripMenuItem()
+        Me.dis_prev_trans = New System.Windows.Forms.ToolStripMenuItem()
+        Me.dis_trans_log = New System.Windows.Forms.ToolStripMenuItem()
         Me.scustomer_group.SuspendLayout()
         Me.TabPage2.SuspendLayout()
         Me.GroupBox5.SuspendLayout()
@@ -264,6 +271,8 @@ Partial Class Form1
         Me.TabControl1.SuspendLayout()
         Me.AcqStrip.SuspendLayout()
         Me.DispStrip.SuspendLayout()
+        Me.acq_SearchStrip.SuspendLayout()
+        Me.dis_SearchStrip.SuspendLayout()
         Me.SuspendLayout()
         '
         'scustomer_group
@@ -400,7 +409,7 @@ Partial Class Form1
         '
         Me.ACstate.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.ACstate.FormattingEnabled = True
-        Me.ACstate.Items.AddRange(New Object() {"AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "DC", "FL", "GA", "HI", "ID", "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MT", "NE", "NV", "NH", "NJ", "NM", "NY", "NC", "ND", "OH", "OK", "OR", "MD", "MA", "MI", "MN", "MS", "MO", "PA", "RI", "SC", "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WV", "WI", "WY"})
+        Me.ACstate.Items.AddRange(New Object() {"AK", "AL", "AR", "AZ", "CA", "CO", "CT", "DE", "FL", "GA", "HI", "IA", "ID", "IL", "IN", "KS", "KY", "LA", "MA", "MD", "ME", "MI", "MN", "MO", "MS", "MT", "NC", "ND", "NE", "NH", "NJ", "NM", "NV", "NY", "OH", "OK", "OR", "PA", "RI", "SC", "SD", "TN", "TX", "UT", "VA", "VT", "WA", "WI", "WV", "WY"})
         Me.ACstate.Location = New System.Drawing.Point(137, 169)
         Me.ACstate.Name = "ACstate"
         Me.ACstate.Size = New System.Drawing.Size(58, 21)
@@ -771,7 +780,7 @@ Partial Class Form1
         Me.Dcode.Margin = New System.Windows.Forms.Padding(2)
         Me.Dcode.Name = "Dcode"
         Me.Dcode.Size = New System.Drawing.Size(119, 20)
-        Me.Dcode.TabIndex = 232
+        Me.Dcode.TabIndex = 1
         '
         'dtransdate
         '
@@ -781,7 +790,7 @@ Partial Class Form1
         Me.dtransdate.Margin = New System.Windows.Forms.Padding(2)
         Me.dtransdate.Name = "dtransdate"
         Me.dtransdate.Size = New System.Drawing.Size(116, 20)
-        Me.dtransdate.TabIndex = 232
+        Me.dtransdate.TabIndex = 0
         Me.dtransdate.Value = New Date(2015, 9, 3, 0, 0, 0, 0)
         '
         'Label77
@@ -801,7 +810,7 @@ Partial Class Form1
         Me.Dsubmit.Margin = New System.Windows.Forms.Padding(2)
         Me.Dsubmit.Name = "Dsubmit"
         Me.Dsubmit.Size = New System.Drawing.Size(246, 32)
-        Me.Dsubmit.TabIndex = 230
+        Me.Dsubmit.TabIndex = 1
         Me.Dsubmit.Text = "Submit"
         Me.Dsubmit.UseVisualStyleBackColor = True
         '
@@ -829,6 +838,7 @@ Partial Class Form1
         Me.gunid.Size = New System.Drawing.Size(33, 13)
         Me.gunid.TabIndex = 231
         Me.gunid.Text = "gunid"
+        Me.gunid.Visible = False
         '
         'DSGserialnum
         '
@@ -948,7 +958,7 @@ Partial Class Form1
         Me.changecustomerbtn.Margin = New System.Windows.Forms.Padding(2)
         Me.changecustomerbtn.Name = "changecustomerbtn"
         Me.changecustomerbtn.Size = New System.Drawing.Size(272, 32)
-        Me.changecustomerbtn.TabIndex = 216
+        Me.changecustomerbtn.TabIndex = 0
         Me.changecustomerbtn.Text = "Change Customer"
         Me.changecustomerbtn.UseVisualStyleBackColor = True
         '
@@ -1126,7 +1136,7 @@ Partial Class Form1
         Me.Dclearbtn.Margin = New System.Windows.Forms.Padding(2)
         Me.Dclearbtn.Name = "Dclearbtn"
         Me.Dclearbtn.Size = New System.Drawing.Size(119, 32)
-        Me.Dclearbtn.TabIndex = 229
+        Me.Dclearbtn.TabIndex = 0
         Me.Dclearbtn.Text = "Clear"
         Me.Dclearbtn.UseVisualStyleBackColor = True
         '
@@ -1137,7 +1147,6 @@ Partial Class Form1
         Me.GroupBox2.Controls.Add(Me.Label51)
         Me.GroupBox2.Controls.Add(Me.Dsearchbtn)
         Me.GroupBox2.Controls.Add(Me.Dserialnum)
-        Me.GroupBox2.Controls.Add(Me.Dpurchase_price)
         Me.GroupBox2.Controls.Add(Me.Dzip)
         Me.GroupBox2.Controls.Add(Me.Dyear)
         Me.GroupBox2.Controls.Add(Me.Dcity)
@@ -1153,7 +1162,6 @@ Partial Class Form1
         Me.GroupBox2.Controls.Add(Me.Dstate)
         Me.GroupBox2.Controls.Add(Me.Label55)
         Me.GroupBox2.Controls.Add(Me.Label56)
-        Me.GroupBox2.Controls.Add(Me.Label57)
         Me.GroupBox2.Controls.Add(Me.Label58)
         Me.GroupBox2.Controls.Add(Me.Dmancountry)
         Me.GroupBox2.Controls.Add(Me.Label59)
@@ -1173,7 +1181,7 @@ Partial Class Form1
         Me.GroupBox2.Location = New System.Drawing.Point(5, 11)
         Me.GroupBox2.Name = "GroupBox2"
         Me.GroupBox2.Size = New System.Drawing.Size(279, 590)
-        Me.GroupBox2.TabIndex = 217
+        Me.GroupBox2.TabIndex = 0
         Me.GroupBox2.TabStop = False
         Me.GroupBox2.Text = "Acquisition Search"
         '
@@ -1194,12 +1202,12 @@ Partial Class Form1
         Me.Dphonenum.Margin = New System.Windows.Forms.Padding(2)
         Me.Dphonenum.Name = "Dphonenum"
         Me.Dphonenum.Size = New System.Drawing.Size(119, 20)
-        Me.Dphonenum.TabIndex = 230
+        Me.Dphonenum.TabIndex = 9
         '
         'Label51
         '
         Me.Label51.AutoSize = True
-        Me.Label51.Location = New System.Drawing.Point(16, 470)
+        Me.Label51.Location = New System.Drawing.Point(138, 432)
         Me.Label51.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.Label51.Name = "Label51"
         Me.Label51.Size = New System.Drawing.Size(80, 13)
@@ -1212,25 +1220,17 @@ Partial Class Form1
         Me.Dsearchbtn.Margin = New System.Windows.Forms.Padding(2)
         Me.Dsearchbtn.Name = "Dsearchbtn"
         Me.Dsearchbtn.Size = New System.Drawing.Size(243, 32)
-        Me.Dsearchbtn.TabIndex = 203
+        Me.Dsearchbtn.TabIndex = 19
         Me.Dsearchbtn.Text = "Search"
         Me.Dsearchbtn.UseVisualStyleBackColor = True
         '
         'Dserialnum
         '
-        Me.Dserialnum.Location = New System.Drawing.Point(17, 483)
+        Me.Dserialnum.Location = New System.Drawing.Point(142, 447)
         Me.Dserialnum.Margin = New System.Windows.Forms.Padding(2)
         Me.Dserialnum.Name = "Dserialnum"
-        Me.Dserialnum.Size = New System.Drawing.Size(242, 20)
-        Me.Dserialnum.TabIndex = 227
-        '
-        'Dpurchase_price
-        '
-        Me.Dpurchase_price.Location = New System.Drawing.Point(141, 447)
-        Me.Dpurchase_price.Margin = New System.Windows.Forms.Padding(2)
-        Me.Dpurchase_price.Name = "Dpurchase_price"
-        Me.Dpurchase_price.Size = New System.Drawing.Size(119, 20)
-        Me.Dpurchase_price.TabIndex = 211
+        Me.Dserialnum.Size = New System.Drawing.Size(117, 20)
+        Me.Dserialnum.TabIndex = 18
         '
         'Dzip
         '
@@ -1238,7 +1238,7 @@ Partial Class Form1
         Me.Dzip.Margin = New System.Windows.Forms.Padding(2)
         Me.Dzip.Name = "Dzip"
         Me.Dzip.Size = New System.Drawing.Size(57, 20)
-        Me.Dzip.TabIndex = 201
+        Me.Dzip.TabIndex = 7
         '
         'Dyear
         '
@@ -1246,7 +1246,7 @@ Partial Class Form1
         Me.Dyear.Margin = New System.Windows.Forms.Padding(2)
         Me.Dyear.Name = "Dyear"
         Me.Dyear.Size = New System.Drawing.Size(119, 20)
-        Me.Dyear.TabIndex = 219
+        Me.Dyear.TabIndex = 16
         '
         'Dcity
         '
@@ -1254,7 +1254,7 @@ Partial Class Form1
         Me.Dcity.Margin = New System.Windows.Forms.Padding(2)
         Me.Dcity.Name = "Dcity"
         Me.Dcity.Size = New System.Drawing.Size(120, 20)
-        Me.Dcity.TabIndex = 199
+        Me.Dcity.TabIndex = 5
         '
         'Daddress2
         '
@@ -1262,7 +1262,7 @@ Partial Class Form1
         Me.Daddress2.Margin = New System.Windows.Forms.Padding(2)
         Me.Daddress2.Name = "Daddress2"
         Me.Daddress2.Size = New System.Drawing.Size(241, 20)
-        Me.Daddress2.TabIndex = 198
+        Me.Daddress2.TabIndex = 4
         '
         'Daddress1
         '
@@ -1270,7 +1270,7 @@ Partial Class Form1
         Me.Daddress1.Margin = New System.Windows.Forms.Padding(2)
         Me.Daddress1.Name = "Daddress1"
         Me.Daddress1.Size = New System.Drawing.Size(241, 20)
-        Me.Daddress1.TabIndex = 197
+        Me.Daddress1.TabIndex = 3
         '
         'Dlicensenum
         '
@@ -1278,7 +1278,7 @@ Partial Class Form1
         Me.Dlicensenum.Margin = New System.Windows.Forms.Padding(2)
         Me.Dlicensenum.Name = "Dlicensenum"
         Me.Dlicensenum.Size = New System.Drawing.Size(120, 20)
-        Me.Dlicensenum.TabIndex = 202
+        Me.Dlicensenum.TabIndex = 8
         '
         'Dcompany
         '
@@ -1286,7 +1286,7 @@ Partial Class Form1
         Me.Dcompany.Margin = New System.Windows.Forms.Padding(2)
         Me.Dcompany.Name = "Dcompany"
         Me.Dcompany.Size = New System.Drawing.Size(241, 20)
-        Me.Dcompany.TabIndex = 196
+        Me.Dcompany.TabIndex = 2
         '
         'Dlname
         '
@@ -1294,7 +1294,7 @@ Partial Class Form1
         Me.Dlname.Margin = New System.Windows.Forms.Padding(2)
         Me.Dlname.Name = "Dlname"
         Me.Dlname.Size = New System.Drawing.Size(119, 20)
-        Me.Dlname.TabIndex = 195
+        Me.Dlname.TabIndex = 1
         '
         'Dfname
         '
@@ -1302,7 +1302,7 @@ Partial Class Form1
         Me.Dfname.Margin = New System.Windows.Forms.Padding(2)
         Me.Dfname.Name = "Dfname"
         Me.Dfname.Size = New System.Drawing.Size(120, 20)
-        Me.Dfname.TabIndex = 193
+        Me.Dfname.TabIndex = 0
         '
         'Label52
         '
@@ -1338,11 +1338,11 @@ Partial Class Form1
         '
         Me.Dstate.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.Dstate.FormattingEnabled = True
-        Me.Dstate.Items.AddRange(New Object() {"AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "DC", "FL", "GA", "HI", "ID", "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MT", "NE", "NV", "NH", "NJ", "NM", "NY", "NC", "ND", "OH", "OK", "OR", "MD", "MA", "MI", "MN", "MS", "MO", "PA", "RI", "SC", "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WV", "WI", "WY"})
+        Me.Dstate.Items.AddRange(New Object() {"AK", "AL", "AR", "AZ", "CA", "CO", "CT", "DE", "FL", "GA", "HI", "IA", "ID", "IL", "IN", "KS", "KY", "LA", "MA", "MD", "ME", "MI", "MN", "MO", "MS", "MT", "NC", "ND", "NE", "NH", "NJ", "NM", "NV", "NY", "OH", "OK", "OR", "PA", "RI", "SC", "SD", "TN", "TX", "UT", "VA", "VT", "WA", "WI", "WV", "WY"})
         Me.Dstate.Location = New System.Drawing.Point(139, 176)
         Me.Dstate.Name = "Dstate"
         Me.Dstate.Size = New System.Drawing.Size(58, 21)
-        Me.Dstate.TabIndex = 200
+        Me.Dstate.TabIndex = 6
         '
         'Label55
         '
@@ -1364,16 +1364,6 @@ Partial Class Form1
         Me.Label56.TabIndex = 209
         Me.Label56.Text = "State:"
         '
-        'Label57
-        '
-        Me.Label57.AutoSize = True
-        Me.Label57.Location = New System.Drawing.Point(138, 432)
-        Me.Label57.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
-        Me.Label57.Name = "Label57"
-        Me.Label57.Size = New System.Drawing.Size(85, 13)
-        Me.Label57.TabIndex = 212
-        Me.Label57.Text = "Purchase Price: "
-        '
         'Label58
         '
         Me.Label58.AutoSize = True
@@ -1391,8 +1381,8 @@ Partial Class Form1
         Me.Dmancountry.Location = New System.Drawing.Point(17, 409)
         Me.Dmancountry.Margin = New System.Windows.Forms.Padding(2)
         Me.Dmancountry.Name = "Dmancountry"
-        Me.Dmancountry.Size = New System.Drawing.Size(243, 21)
-        Me.Dmancountry.TabIndex = 217
+        Me.Dmancountry.Size = New System.Drawing.Size(242, 21)
+        Me.Dmancountry.TabIndex = 15
         '
         'Label59
         '
@@ -1493,7 +1483,7 @@ Partial Class Form1
         Me.Dtype.Margin = New System.Windows.Forms.Padding(2)
         Me.Dtype.Name = "Dtype"
         Me.Dtype.Size = New System.Drawing.Size(119, 21)
-        Me.Dtype.TabIndex = 213
+        Me.Dtype.TabIndex = 11
         '
         'Dmodel
         '
@@ -1503,7 +1493,7 @@ Partial Class Form1
         Me.Dmodel.Margin = New System.Windows.Forms.Padding(2)
         Me.Dmodel.Name = "Dmodel"
         Me.Dmodel.Size = New System.Drawing.Size(119, 21)
-        Me.Dmodel.TabIndex = 216
+        Me.Dmodel.TabIndex = 14
         '
         'Dmanufacturer
         '
@@ -1513,7 +1503,7 @@ Partial Class Form1
         Me.Dmanufacturer.Margin = New System.Windows.Forms.Padding(2)
         Me.Dmanufacturer.Name = "Dmanufacturer"
         Me.Dmanufacturer.Size = New System.Drawing.Size(119, 21)
-        Me.Dmanufacturer.TabIndex = 215
+        Me.Dmanufacturer.TabIndex = 13
         '
         'Dcategory
         '
@@ -1523,7 +1513,7 @@ Partial Class Form1
         Me.Dcategory.Margin = New System.Windows.Forms.Padding(2)
         Me.Dcategory.Name = "Dcategory"
         Me.Dcategory.Size = New System.Drawing.Size(242, 21)
-        Me.Dcategory.TabIndex = 218
+        Me.Dcategory.TabIndex = 10
         '
         'Dcaliber
         '
@@ -1532,8 +1522,8 @@ Partial Class Form1
         Me.Dcaliber.Location = New System.Drawing.Point(141, 335)
         Me.Dcaliber.Margin = New System.Windows.Forms.Padding(2)
         Me.Dcaliber.Name = "Dcaliber"
-        Me.Dcaliber.Size = New System.Drawing.Size(119, 21)
-        Me.Dcaliber.TabIndex = 214
+        Me.Dcaliber.Size = New System.Drawing.Size(118, 21)
+        Me.Dcaliber.TabIndex = 12
         '
         'dsearch_grid
         '
@@ -1615,13 +1605,53 @@ Partial Class Form1
         Me.GroupBox1.TabStop = False
         Me.GroupBox1.Text = "Firearm"
         '
+        'newmodel
+        '
+        Me.newmodel.Location = New System.Drawing.Point(372, 114)
+        Me.newmodel.Margin = New System.Windows.Forms.Padding(2)
+        Me.newmodel.Name = "newmodel"
+        Me.newmodel.Size = New System.Drawing.Size(68, 21)
+        Me.newmodel.TabIndex = 199
+        Me.newmodel.Text = "New"
+        Me.newmodel.UseVisualStyleBackColor = True
+        '
+        'newcaliber
+        '
+        Me.newcaliber.Location = New System.Drawing.Point(372, 71)
+        Me.newcaliber.Margin = New System.Windows.Forms.Padding(2)
+        Me.newcaliber.Name = "newcaliber"
+        Me.newcaliber.Size = New System.Drawing.Size(68, 21)
+        Me.newcaliber.TabIndex = 198
+        Me.newcaliber.Text = "New"
+        Me.newcaliber.UseVisualStyleBackColor = True
+        '
+        'newmancountry
+        '
+        Me.newmancountry.Location = New System.Drawing.Point(145, 153)
+        Me.newmancountry.Margin = New System.Windows.Forms.Padding(2)
+        Me.newmancountry.Name = "newmancountry"
+        Me.newmancountry.Size = New System.Drawing.Size(68, 21)
+        Me.newmancountry.TabIndex = 197
+        Me.newmancountry.Text = "New"
+        Me.newmancountry.UseVisualStyleBackColor = True
+        '
+        'newman
+        '
+        Me.newman.Location = New System.Drawing.Point(145, 114)
+        Me.newman.Margin = New System.Windows.Forms.Padding(2)
+        Me.newman.Name = "newman"
+        Me.newman.Size = New System.Drawing.Size(68, 21)
+        Me.newman.TabIndex = 195
+        Me.newman.Text = "New"
+        Me.newman.UseVisualStyleBackColor = True
+        '
         'adeadline_no
         '
         Me.adeadline_no.AutoSize = True
         Me.adeadline_no.Location = New System.Drawing.Point(519, 35)
         Me.adeadline_no.Name = "adeadline_no"
         Me.adeadline_no.Size = New System.Drawing.Size(39, 17)
-        Me.adeadline_no.TabIndex = 196
+        Me.adeadline_no.TabIndex = 11
         Me.adeadline_no.TabStop = True
         Me.adeadline_no.Text = "No"
         Me.adeadline_no.UseVisualStyleBackColor = True
@@ -1642,7 +1672,7 @@ Partial Class Form1
         Me.adeadline_yes.Location = New System.Drawing.Point(470, 35)
         Me.adeadline_yes.Name = "adeadline_yes"
         Me.adeadline_yes.Size = New System.Drawing.Size(43, 17)
-        Me.adeadline_yes.TabIndex = 195
+        Me.adeadline_yes.TabIndex = 10
         Me.adeadline_yes.TabStop = True
         Me.adeadline_yes.Text = "Yes"
         Me.adeadline_yes.UseVisualStyleBackColor = True
@@ -1686,7 +1716,7 @@ Partial Class Form1
         Me.Atransdate.Margin = New System.Windows.Forms.Padding(2)
         Me.Atransdate.Name = "Atransdate"
         Me.Atransdate.Size = New System.Drawing.Size(116, 20)
-        Me.Atransdate.TabIndex = 9
+        Me.Atransdate.TabIndex = 5
         Me.Atransdate.Value = New Date(2015, 9, 3, 0, 0, 0, 0)
         '
         'Aserialnum
@@ -1695,7 +1725,7 @@ Partial Class Form1
         Me.Aserialnum.Margin = New System.Windows.Forms.Padding(2)
         Me.Aserialnum.Name = "Aserialnum"
         Me.Aserialnum.Size = New System.Drawing.Size(259, 20)
-        Me.Aserialnum.TabIndex = 11
+        Me.Aserialnum.TabIndex = 13
         '
         'Label3
         '
@@ -1715,7 +1745,7 @@ Partial Class Form1
         Me.Atype.Margin = New System.Windows.Forms.Padding(2)
         Me.Atype.Name = "Atype"
         Me.Atype.Size = New System.Drawing.Size(116, 21)
-        Me.Atype.TabIndex = 2
+        Me.Atype.TabIndex = 8
         '
         'Anotes
         '
@@ -1724,7 +1754,7 @@ Partial Class Form1
         Me.Anotes.Multiline = True
         Me.Anotes.Name = "Anotes"
         Me.Anotes.Size = New System.Drawing.Size(258, 98)
-        Me.Anotes.TabIndex = 12
+        Me.Anotes.TabIndex = 14
         '
         'Acaliber
         '
@@ -1734,7 +1764,7 @@ Partial Class Form1
         Me.Acaliber.Margin = New System.Windows.Forms.Padding(2)
         Me.Acaliber.Name = "Acaliber"
         Me.Acaliber.Size = New System.Drawing.Size(116, 21)
-        Me.Acaliber.TabIndex = 3
+        Me.Acaliber.TabIndex = 6
         '
         'Ayear
         '
@@ -1742,7 +1772,7 @@ Partial Class Form1
         Me.Ayear.Margin = New System.Windows.Forms.Padding(2)
         Me.Ayear.Name = "Ayear"
         Me.Ayear.Size = New System.Drawing.Size(119, 20)
-        Me.Ayear.TabIndex = 7
+        Me.Ayear.TabIndex = 4
         '
         'Amanufacturers
         '
@@ -1752,7 +1782,7 @@ Partial Class Form1
         Me.Amanufacturers.Margin = New System.Windows.Forms.Padding(2)
         Me.Amanufacturers.Name = "Amanufacturers"
         Me.Amanufacturers.Size = New System.Drawing.Size(121, 21)
-        Me.Amanufacturers.TabIndex = 4
+        Me.Amanufacturers.TabIndex = 2
         '
         'APrice
         '
@@ -1760,7 +1790,7 @@ Partial Class Form1
         Me.APrice.Margin = New System.Windows.Forms.Padding(2)
         Me.APrice.Name = "APrice"
         Me.APrice.Size = New System.Drawing.Size(117, 20)
-        Me.APrice.TabIndex = 8
+        Me.APrice.TabIndex = 9
         '
         'Amodel
         '
@@ -1770,7 +1800,7 @@ Partial Class Form1
         Me.Amodel.Margin = New System.Windows.Forms.Padding(2)
         Me.Amodel.Name = "Amodel"
         Me.Amodel.Size = New System.Drawing.Size(116, 21)
-        Me.Amodel.TabIndex = 5
+        Me.Amodel.TabIndex = 7
         '
         'Label18
         '
@@ -1790,7 +1820,7 @@ Partial Class Form1
         Me.Amancountry.Margin = New System.Windows.Forms.Padding(2)
         Me.Amancountry.Name = "Amancountry"
         Me.Amancountry.Size = New System.Drawing.Size(121, 21)
-        Me.Amancountry.TabIndex = 6
+        Me.Amancountry.TabIndex = 3
         '
         'Label19
         '
@@ -1850,7 +1880,7 @@ Partial Class Form1
         Me.Adeadline.Margin = New System.Windows.Forms.Padding(2)
         Me.Adeadline.Name = "Adeadline"
         Me.Adeadline.Size = New System.Drawing.Size(116, 20)
-        Me.Adeadline.TabIndex = 23
+        Me.Adeadline.TabIndex = 12
         Me.Adeadline.Value = New Date(2015, 9, 3, 0, 0, 0, 0)
         '
         'Label5
@@ -1899,7 +1929,7 @@ Partial Class Form1
         Me.Aclear.Margin = New System.Windows.Forms.Padding(2)
         Me.Aclear.Name = "Aclear"
         Me.Aclear.Size = New System.Drawing.Size(82, 36)
-        Me.Aclear.TabIndex = 1
+        Me.Aclear.TabIndex = 0
         Me.Aclear.Text = "Clear"
         Me.Aclear.UseVisualStyleBackColor = True
         '
@@ -1921,12 +1951,13 @@ Partial Class Form1
         Me.Asubmit.Margin = New System.Windows.Forms.Padding(2)
         Me.Asubmit.Name = "Asubmit"
         Me.Asubmit.Size = New System.Drawing.Size(206, 36)
-        Me.Asubmit.TabIndex = 0
+        Me.Asubmit.TabIndex = 1
         Me.Asubmit.Text = "Submit"
         Me.Asubmit.UseVisualStyleBackColor = True
         '
         'TabPage4
         '
+        Me.TabPage4.Controls.Add(Me.phonenumbercb)
         Me.TabPage4.Controls.Add(Me.showbtn)
         Me.TabPage4.Controls.Add(Me.allcb)
         Me.TabPage4.Controls.Add(Me.transdatecb)
@@ -1954,7 +1985,6 @@ Partial Class Form1
         Me.TabPage4.Controls.Add(Me.Label30)
         Me.TabPage4.Controls.Add(Me.Ssearch)
         Me.TabPage4.Controls.Add(Me.Sserialnum)
-        Me.TabPage4.Controls.Add(Me.Spurchase_price)
         Me.TabPage4.Controls.Add(Me.Szip)
         Me.TabPage4.Controls.Add(Me.Syear)
         Me.TabPage4.Controls.Add(Me.Scity)
@@ -1970,7 +2000,6 @@ Partial Class Form1
         Me.TabPage4.Controls.Add(Me.Sstate)
         Me.TabPage4.Controls.Add(Me.Label33)
         Me.TabPage4.Controls.Add(Me.Label12)
-        Me.TabPage4.Controls.Add(Me.Label40)
         Me.TabPage4.Controls.Add(Me.Label34)
         Me.TabPage4.Controls.Add(Me.Smancountry)
         Me.TabPage4.Controls.Add(Me.Label39)
@@ -1994,72 +2023,82 @@ Partial Class Form1
         Me.TabPage4.Text = "Search"
         Me.TabPage4.UseVisualStyleBackColor = True
         '
+        'phonenumbercb
+        '
+        Me.phonenumbercb.AutoSize = True
+        Me.phonenumbercb.Location = New System.Drawing.Point(1336, 234)
+        Me.phonenumbercb.Name = "phonenumbercb"
+        Me.phonenumbercb.Size = New System.Drawing.Size(97, 17)
+        Me.phonenumbercb.TabIndex = 159
+        Me.phonenumbercb.Text = "Phone Number"
+        Me.phonenumbercb.UseVisualStyleBackColor = True
+        '
         'showbtn
         '
-        Me.showbtn.Location = New System.Drawing.Point(1336, 372)
+        Me.showbtn.Location = New System.Drawing.Point(1336, 397)
         Me.showbtn.Name = "showbtn"
         Me.showbtn.Size = New System.Drawing.Size(108, 32)
-        Me.showbtn.TabIndex = 174
+        Me.showbtn.TabIndex = 36
         Me.showbtn.Text = "Show"
         Me.showbtn.UseVisualStyleBackColor = True
         '
         'allcb
         '
         Me.allcb.AutoSize = True
-        Me.allcb.Location = New System.Drawing.Point(1336, 349)
+        Me.allcb.Location = New System.Drawing.Point(1336, 374)
         Me.allcb.Name = "allcb"
         Me.allcb.Size = New System.Drawing.Size(89, 17)
-        Me.allcb.TabIndex = 173
+        Me.allcb.TabIndex = 35
         Me.allcb.Text = "SELECT ALL"
         Me.allcb.UseVisualStyleBackColor = True
         '
         'transdatecb
         '
         Me.transdatecb.AutoSize = True
-        Me.transdatecb.Location = New System.Drawing.Point(1336, 326)
+        Me.transdatecb.Location = New System.Drawing.Point(1336, 351)
         Me.transdatecb.Name = "transdatecb"
         Me.transdatecb.Size = New System.Drawing.Size(108, 17)
-        Me.transdatecb.TabIndex = 172
+        Me.transdatecb.TabIndex = 34
         Me.transdatecb.Text = "Transaction Date"
         Me.transdatecb.UseVisualStyleBackColor = True
         '
         'serialnumcb
         '
         Me.serialnumcb.AutoSize = True
-        Me.serialnumcb.Location = New System.Drawing.Point(1336, 303)
+        Me.serialnumcb.Location = New System.Drawing.Point(1336, 328)
         Me.serialnumcb.Name = "serialnumcb"
         Me.serialnumcb.Size = New System.Drawing.Size(92, 17)
-        Me.serialnumcb.TabIndex = 171
+        Me.serialnumcb.TabIndex = 33
         Me.serialnumcb.Text = "Serial Number"
         Me.serialnumcb.UseVisualStyleBackColor = True
         '
         'calibercb
         '
         Me.calibercb.AutoSize = True
-        Me.calibercb.Location = New System.Drawing.Point(1336, 280)
+        Me.calibercb.Location = New System.Drawing.Point(1336, 305)
         Me.calibercb.Name = "calibercb"
         Me.calibercb.Size = New System.Drawing.Size(58, 17)
-        Me.calibercb.TabIndex = 170
+        Me.calibercb.TabIndex = 32
         Me.calibercb.Text = "Caliber"
         Me.calibercb.UseVisualStyleBackColor = True
         '
         'modelcb
         '
         Me.modelcb.AutoSize = True
-        Me.modelcb.Location = New System.Drawing.Point(1336, 257)
+        Me.modelcb.Location = New System.Drawing.Point(1336, 282)
         Me.modelcb.Name = "modelcb"
         Me.modelcb.Size = New System.Drawing.Size(55, 17)
-        Me.modelcb.TabIndex = 169
+        Me.modelcb.TabIndex = 31
         Me.modelcb.Text = "Model"
         Me.modelcb.UseVisualStyleBackColor = True
         '
         'manufacturercb
         '
         Me.manufacturercb.AutoSize = True
-        Me.manufacturercb.Location = New System.Drawing.Point(1336, 234)
+        Me.manufacturercb.Location = New System.Drawing.Point(1336, 259)
         Me.manufacturercb.Name = "manufacturercb"
         Me.manufacturercb.Size = New System.Drawing.Size(89, 17)
-        Me.manufacturercb.TabIndex = 168
+        Me.manufacturercb.TabIndex = 30
         Me.manufacturercb.Text = "Manufacturer"
         Me.manufacturercb.UseVisualStyleBackColor = True
         '
@@ -2069,7 +2108,7 @@ Partial Class Form1
         Me.licensenumcb.Location = New System.Drawing.Point(1336, 211)
         Me.licensenumcb.Name = "licensenumcb"
         Me.licensenumcb.Size = New System.Drawing.Size(103, 17)
-        Me.licensenumcb.TabIndex = 167
+        Me.licensenumcb.TabIndex = 29
         Me.licensenumcb.Text = "License Number"
         Me.licensenumcb.UseVisualStyleBackColor = True
         '
@@ -2079,7 +2118,7 @@ Partial Class Form1
         Me.zipcb.Location = New System.Drawing.Point(1336, 188)
         Me.zipcb.Name = "zipcb"
         Me.zipcb.Size = New System.Drawing.Size(41, 17)
-        Me.zipcb.TabIndex = 166
+        Me.zipcb.TabIndex = 28
         Me.zipcb.Text = "Zip"
         Me.zipcb.UseVisualStyleBackColor = True
         '
@@ -2089,7 +2128,7 @@ Partial Class Form1
         Me.statecb.Location = New System.Drawing.Point(1336, 165)
         Me.statecb.Name = "statecb"
         Me.statecb.Size = New System.Drawing.Size(51, 17)
-        Me.statecb.TabIndex = 165
+        Me.statecb.TabIndex = 27
         Me.statecb.Text = "State"
         Me.statecb.UseVisualStyleBackColor = True
         '
@@ -2099,7 +2138,7 @@ Partial Class Form1
         Me.citycb.Location = New System.Drawing.Point(1336, 142)
         Me.citycb.Name = "citycb"
         Me.citycb.Size = New System.Drawing.Size(43, 17)
-        Me.citycb.TabIndex = 164
+        Me.citycb.TabIndex = 26
         Me.citycb.Text = "City"
         Me.citycb.UseVisualStyleBackColor = True
         '
@@ -2109,7 +2148,7 @@ Partial Class Form1
         Me.address2cb.Location = New System.Drawing.Point(1336, 119)
         Me.address2cb.Name = "address2cb"
         Me.address2cb.Size = New System.Drawing.Size(73, 17)
-        Me.address2cb.TabIndex = 163
+        Me.address2cb.TabIndex = 25
         Me.address2cb.Text = "Address 2"
         Me.address2cb.UseVisualStyleBackColor = True
         '
@@ -2119,7 +2158,7 @@ Partial Class Form1
         Me.address1cb.Location = New System.Drawing.Point(1336, 96)
         Me.address1cb.Name = "address1cb"
         Me.address1cb.Size = New System.Drawing.Size(70, 17)
-        Me.address1cb.TabIndex = 162
+        Me.address1cb.TabIndex = 24
         Me.address1cb.Text = "Address1"
         Me.address1cb.UseVisualStyleBackColor = True
         '
@@ -2129,7 +2168,7 @@ Partial Class Form1
         Me.companycb.Location = New System.Drawing.Point(1336, 73)
         Me.companycb.Name = "companycb"
         Me.companycb.Size = New System.Drawing.Size(70, 17)
-        Me.companycb.TabIndex = 161
+        Me.companycb.TabIndex = 23
         Me.companycb.Text = "Company"
         Me.companycb.UseVisualStyleBackColor = True
         '
@@ -2139,7 +2178,7 @@ Partial Class Form1
         Me.lastnamecb.Location = New System.Drawing.Point(1336, 50)
         Me.lastnamecb.Name = "lastnamecb"
         Me.lastnamecb.Size = New System.Drawing.Size(77, 17)
-        Me.lastnamecb.TabIndex = 160
+        Me.lastnamecb.TabIndex = 22
         Me.lastnamecb.Text = "Last Name"
         Me.lastnamecb.UseVisualStyleBackColor = True
         '
@@ -2149,7 +2188,7 @@ Partial Class Form1
         Me.firstnamecb.Location = New System.Drawing.Point(1336, 27)
         Me.firstnamecb.Name = "firstnamecb"
         Me.firstnamecb.Size = New System.Drawing.Size(76, 17)
-        Me.firstnamecb.TabIndex = 159
+        Me.firstnamecb.TabIndex = 21
         Me.firstnamecb.Text = "First Name"
         Me.firstnamecb.UseVisualStyleBackColor = True
         '
@@ -2219,7 +2258,7 @@ Partial Class Form1
         Me.Sphone.Margin = New System.Windows.Forms.Padding(2)
         Me.Sphone.Name = "Sphone"
         Me.Sphone.Size = New System.Drawing.Size(119, 20)
-        Me.Sphone.TabIndex = 152
+        Me.Sphone.TabIndex = 9
         '
         'Sclear
         '
@@ -2227,14 +2266,14 @@ Partial Class Form1
         Me.Sclear.Margin = New System.Windows.Forms.Padding(2)
         Me.Sclear.Name = "Sclear"
         Me.Sclear.Size = New System.Drawing.Size(119, 32)
-        Me.Sclear.TabIndex = 151
+        Me.Sclear.TabIndex = 20
         Me.Sclear.Text = "Clear"
         Me.Sclear.UseVisualStyleBackColor = True
         '
         'Label30
         '
         Me.Label30.AutoSize = True
-        Me.Label30.Location = New System.Drawing.Point(12, 447)
+        Me.Label30.Location = New System.Drawing.Point(136, 411)
         Me.Label30.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.Label30.Name = "Label30"
         Me.Label30.Size = New System.Drawing.Size(80, 13)
@@ -2247,25 +2286,17 @@ Partial Class Form1
         Me.Ssearch.Margin = New System.Windows.Forms.Padding(2)
         Me.Ssearch.Name = "Ssearch"
         Me.Ssearch.Size = New System.Drawing.Size(120, 32)
-        Me.Ssearch.TabIndex = 9
+        Me.Ssearch.TabIndex = 19
         Me.Ssearch.Text = "Search"
         Me.Ssearch.UseVisualStyleBackColor = True
         '
         'Sserialnum
         '
-        Me.Sserialnum.Location = New System.Drawing.Point(15, 462)
+        Me.Sserialnum.Location = New System.Drawing.Point(137, 426)
         Me.Sserialnum.Margin = New System.Windows.Forms.Padding(2)
         Me.Sserialnum.Name = "Sserialnum"
-        Me.Sserialnum.Size = New System.Drawing.Size(241, 20)
-        Me.Sserialnum.TabIndex = 149
-        '
-        'Spurchase_price
-        '
-        Me.Spurchase_price.Location = New System.Drawing.Point(138, 426)
-        Me.Spurchase_price.Margin = New System.Windows.Forms.Padding(2)
-        Me.Spurchase_price.Name = "Spurchase_price"
-        Me.Spurchase_price.Size = New System.Drawing.Size(119, 20)
-        Me.Spurchase_price.TabIndex = 130
+        Me.Sserialnum.Size = New System.Drawing.Size(119, 20)
+        Me.Sserialnum.TabIndex = 18
         '
         'Szip
         '
@@ -2281,7 +2312,7 @@ Partial Class Form1
         Me.Syear.Margin = New System.Windows.Forms.Padding(2)
         Me.Syear.Name = "Syear"
         Me.Syear.Size = New System.Drawing.Size(119, 20)
-        Me.Syear.TabIndex = 138
+        Me.Syear.TabIndex = 16
         '
         'Scity
         '
@@ -2373,7 +2404,7 @@ Partial Class Form1
         '
         Me.Sstate.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.Sstate.FormattingEnabled = True
-        Me.Sstate.Items.AddRange(New Object() {"AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "DC", "FL", "GA", "HI", "ID", "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MT", "NE", "NV", "NH", "NJ", "NM", "NY", "NC", "ND", "OH", "OK", "OR", "MD", "MA", "MI", "MN", "MS", "MO", "PA", "RI", "SC", "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WV", "WI", "WY"})
+        Me.Sstate.Items.AddRange(New Object() {"AK", "AL", "AR", "AZ", "CA", "CO", "CT", "DE", "FL", "GA", "HI", "IA", "ID", "IL", "IN", "KS", "KY", "LA", "MA", "MD", "ME", "MI", "MN", "MO", "MS", "MT", "NC", "ND", "NE", "NH", "NJ", "NM", "NV", "NY", "OH", "OK", "OR", "PA", "RI", "SC", "SD", "TN", "TX", "UT", "VA", "VT", "WA", "WI", "WV", "WY"})
         Me.Sstate.Location = New System.Drawing.Point(136, 161)
         Me.Sstate.Name = "Sstate"
         Me.Sstate.Size = New System.Drawing.Size(58, 21)
@@ -2399,16 +2430,6 @@ Partial Class Form1
         Me.Label12.TabIndex = 98
         Me.Label12.Text = "State:"
         '
-        'Label40
-        '
-        Me.Label40.AutoSize = True
-        Me.Label40.Location = New System.Drawing.Point(135, 411)
-        Me.Label40.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
-        Me.Label40.Name = "Label40"
-        Me.Label40.Size = New System.Drawing.Size(85, 13)
-        Me.Label40.TabIndex = 131
-        Me.Label40.Text = "Purchase Price: "
-        '
         'Label34
         '
         Me.Label34.AutoSize = True
@@ -2427,7 +2448,7 @@ Partial Class Form1
         Me.Smancountry.Margin = New System.Windows.Forms.Padding(2)
         Me.Smancountry.Name = "Smancountry"
         Me.Smancountry.Size = New System.Drawing.Size(242, 21)
-        Me.Smancountry.TabIndex = 136
+        Me.Smancountry.TabIndex = 15
         '
         'Label39
         '
@@ -2528,7 +2549,7 @@ Partial Class Form1
         Me.Stype.Margin = New System.Windows.Forms.Padding(2)
         Me.Stype.Name = "Stype"
         Me.Stype.Size = New System.Drawing.Size(119, 21)
-        Me.Stype.TabIndex = 132
+        Me.Stype.TabIndex = 11
         '
         'Smodel
         '
@@ -2538,7 +2559,7 @@ Partial Class Form1
         Me.Smodel.Margin = New System.Windows.Forms.Padding(2)
         Me.Smodel.Name = "Smodel"
         Me.Smodel.Size = New System.Drawing.Size(119, 21)
-        Me.Smodel.TabIndex = 135
+        Me.Smodel.TabIndex = 14
         '
         'Smanufacturer
         '
@@ -2548,7 +2569,7 @@ Partial Class Form1
         Me.Smanufacturer.Margin = New System.Windows.Forms.Padding(2)
         Me.Smanufacturer.Name = "Smanufacturer"
         Me.Smanufacturer.Size = New System.Drawing.Size(119, 21)
-        Me.Smanufacturer.TabIndex = 134
+        Me.Smanufacturer.TabIndex = 13
         '
         'Scat
         '
@@ -2558,7 +2579,7 @@ Partial Class Form1
         Me.Scat.Margin = New System.Windows.Forms.Padding(2)
         Me.Scat.Name = "Scat"
         Me.Scat.Size = New System.Drawing.Size(241, 21)
-        Me.Scat.TabIndex = 137
+        Me.Scat.TabIndex = 10
         '
         'Scaliber
         '
@@ -2568,7 +2589,7 @@ Partial Class Form1
         Me.Scaliber.Margin = New System.Windows.Forms.Padding(2)
         Me.Scaliber.Name = "Scaliber"
         Me.Scaliber.Size = New System.Drawing.Size(119, 21)
-        Me.Scaliber.TabIndex = 133
+        Me.Scaliber.TabIndex = 12
         '
         'TabControl1
         '
@@ -2584,9 +2605,15 @@ Partial Class Form1
         '
         'AcqStrip
         '
-        Me.AcqStrip.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripMenuItem1, Me.ToolStripMenuItem2})
+        Me.AcqStrip.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.acq_contact_history, Me.ToolStripMenuItem1, Me.ToolStripMenuItem2})
         Me.AcqStrip.Name = "ContextMenuStrip1"
-        Me.AcqStrip.Size = New System.Drawing.Size(161, 48)
+        Me.AcqStrip.Size = New System.Drawing.Size(161, 70)
+        '
+        'acq_contact_history
+        '
+        Me.acq_contact_history.Name = "acq_contact_history"
+        Me.acq_contact_history.Size = New System.Drawing.Size(160, 22)
+        Me.acq_contact_history.Text = "Contact History"
         '
         'ToolStripMenuItem1
         '
@@ -2612,45 +2639,53 @@ Partial Class Form1
         Me.ToolStripMenuItem3.Size = New System.Drawing.Size(168, 22)
         Me.ToolStripMenuItem3.Text = "Select Acquisition"
         '
-        'newman
+        'acq_SearchStrip
         '
-        Me.newman.Location = New System.Drawing.Point(145, 114)
-        Me.newman.Margin = New System.Windows.Forms.Padding(2)
-        Me.newman.Name = "newman"
-        Me.newman.Size = New System.Drawing.Size(68, 21)
-        Me.newman.TabIndex = 195
-        Me.newman.Text = "New"
-        Me.newman.UseVisualStyleBackColor = True
+        Me.acq_SearchStrip.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.search_contact_history, Me.search_prev_trans, Me.search_trans_log})
+        Me.acq_SearchStrip.Name = "ContextMenuStrip1"
+        Me.acq_SearchStrip.Size = New System.Drawing.Size(189, 70)
         '
-        'newmancountry
+        'search_contact_history
         '
-        Me.newmancountry.Location = New System.Drawing.Point(145, 153)
-        Me.newmancountry.Margin = New System.Windows.Forms.Padding(2)
-        Me.newmancountry.Name = "newmancountry"
-        Me.newmancountry.Size = New System.Drawing.Size(68, 21)
-        Me.newmancountry.TabIndex = 197
-        Me.newmancountry.Text = "New"
-        Me.newmancountry.UseVisualStyleBackColor = True
+        Me.search_contact_history.Name = "search_contact_history"
+        Me.search_contact_history.Size = New System.Drawing.Size(188, 22)
+        Me.search_contact_history.Text = "Contact History"
         '
-        'newcaliber
+        'search_prev_trans
         '
-        Me.newcaliber.Location = New System.Drawing.Point(372, 71)
-        Me.newcaliber.Margin = New System.Windows.Forms.Padding(2)
-        Me.newcaliber.Name = "newcaliber"
-        Me.newcaliber.Size = New System.Drawing.Size(68, 21)
-        Me.newcaliber.TabIndex = 198
-        Me.newcaliber.Text = "New"
-        Me.newcaliber.UseVisualStyleBackColor = True
+        Me.search_prev_trans.Name = "search_prev_trans"
+        Me.search_prev_trans.Size = New System.Drawing.Size(188, 22)
+        Me.search_prev_trans.Text = "Previous Transactions"
         '
-        'newmodel
+        'search_trans_log
         '
-        Me.newmodel.Location = New System.Drawing.Point(372, 114)
-        Me.newmodel.Margin = New System.Windows.Forms.Padding(2)
-        Me.newmodel.Name = "newmodel"
-        Me.newmodel.Size = New System.Drawing.Size(68, 21)
-        Me.newmodel.TabIndex = 199
-        Me.newmodel.Text = "New"
-        Me.newmodel.UseVisualStyleBackColor = True
+        Me.search_trans_log.Name = "search_trans_log"
+        Me.search_trans_log.Size = New System.Drawing.Size(188, 22)
+        Me.search_trans_log.Text = "Transaction Log"
+        '
+        'dis_SearchStrip
+        '
+        Me.dis_SearchStrip.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.dis_contact_history, Me.dis_prev_trans, Me.dis_trans_log})
+        Me.dis_SearchStrip.Name = "ContextMenuStrip1"
+        Me.dis_SearchStrip.Size = New System.Drawing.Size(189, 70)
+        '
+        'dis_contact_history
+        '
+        Me.dis_contact_history.Name = "dis_contact_history"
+        Me.dis_contact_history.Size = New System.Drawing.Size(188, 22)
+        Me.dis_contact_history.Text = "Contact History"
+        '
+        'dis_prev_trans
+        '
+        Me.dis_prev_trans.Name = "dis_prev_trans"
+        Me.dis_prev_trans.Size = New System.Drawing.Size(188, 22)
+        Me.dis_prev_trans.Text = "Previous Transactions"
+        '
+        'dis_trans_log
+        '
+        Me.dis_trans_log.Name = "dis_trans_log"
+        Me.dis_trans_log.Size = New System.Drawing.Size(188, 22)
+        Me.dis_trans_log.Text = "Transaction Log"
         '
         'Form1
         '
@@ -2658,9 +2693,12 @@ Partial Class Form1
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(1486, 690)
         Me.Controls.Add(Me.TabControl1)
+        Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog
+        Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.Margin = New System.Windows.Forms.Padding(2)
+        Me.MaximizeBox = False
         Me.Name = "Form1"
-        Me.Text = "Company Name"
+        Me.Text = "Gun Locker"
         Me.scustomer_group.ResumeLayout(False)
         Me.scustomer_group.PerformLayout()
         Me.TabPage2.ResumeLayout(False)
@@ -2686,6 +2724,8 @@ Partial Class Form1
         Me.TabControl1.ResumeLayout(False)
         Me.AcqStrip.ResumeLayout(False)
         Me.DispStrip.ResumeLayout(False)
+        Me.acq_SearchStrip.ResumeLayout(False)
+        Me.dis_SearchStrip.ResumeLayout(False)
         Me.ResumeLayout(False)
 
     End Sub
@@ -2745,7 +2785,6 @@ Partial Class Form1
     Friend WithEvents Label39 As Label
     Friend WithEvents Smancountry As ComboBox
     Friend WithEvents Label34 As Label
-    Friend WithEvents Label40 As Label
     Friend WithEvents Label12 As Label
     Friend WithEvents Label33 As Label
     Friend WithEvents Sstate As ComboBox
@@ -2761,7 +2800,6 @@ Partial Class Form1
     Friend WithEvents Scity As TextBox
     Friend WithEvents Syear As TextBox
     Friend WithEvents Szip As TextBox
-    Friend WithEvents Spurchase_price As TextBox
     Friend WithEvents Sserialnum As TextBox
     Friend WithEvents Ssearch As Button
     Friend WithEvents Label30 As Label
@@ -2869,7 +2907,6 @@ Partial Class Form1
     Friend WithEvents Label59 As Label
     Friend WithEvents Dmancountry As ComboBox
     Friend WithEvents Label58 As Label
-    Friend WithEvents Label57 As Label
     Friend WithEvents Label56 As Label
     Friend WithEvents Label55 As Label
     Friend WithEvents Dstate As ComboBox
@@ -2885,7 +2922,6 @@ Partial Class Form1
     Friend WithEvents Dcity As TextBox
     Friend WithEvents Dyear As TextBox
     Friend WithEvents Dzip As TextBox
-    Friend WithEvents Dpurchase_price As TextBox
     Friend WithEvents Dserialnum As TextBox
     Friend WithEvents Dsearchbtn As Button
     Friend WithEvents Label51 As Label
@@ -2915,4 +2951,14 @@ Partial Class Form1
     Friend WithEvents newcaliber As Button
     Friend WithEvents newmancountry As Button
     Friend WithEvents newman As Button
+    Friend WithEvents phonenumbercb As CheckBox
+    Friend WithEvents acq_SearchStrip As ContextMenuStrip
+    Friend WithEvents search_contact_history As ToolStripMenuItem
+    Friend WithEvents search_trans_log As ToolStripMenuItem
+    Friend WithEvents search_prev_trans As ToolStripMenuItem
+    Friend WithEvents dis_SearchStrip As ContextMenuStrip
+    Friend WithEvents dis_contact_history As ToolStripMenuItem
+    Friend WithEvents dis_prev_trans As ToolStripMenuItem
+    Friend WithEvents dis_trans_log As ToolStripMenuItem
+    Friend WithEvents acq_contact_history As ToolStripMenuItem
 End Class
